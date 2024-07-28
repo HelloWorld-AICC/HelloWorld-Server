@@ -18,4 +18,8 @@ public class File {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne
+    @JoinColumn(name = "center_id")
+    private Center center;
 }

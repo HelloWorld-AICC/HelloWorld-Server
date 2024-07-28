@@ -36,6 +36,4 @@ public class Counselor {
     @JoinColumn(name = "center_id")
     private Center center;
 
-    @OneToMany(mappedBy = "counselor", cascade = CascadeType.ALL)
-    private List<Reservation> reservationList = new ArrayList<>();
 }
