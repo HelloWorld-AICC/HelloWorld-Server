@@ -46,4 +46,7 @@ public class Center {
     @OneToMany(mappedBy = "center", cascade = CascadeType.ALL)
     private List<Reservation> reservationList = new ArrayList<>();
 
+    @OneToOne(mappedBy = "center", cascade = CascadeType.ALL)
+    private File file;
+
 }
