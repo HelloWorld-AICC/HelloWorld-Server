@@ -2,6 +2,7 @@ package com.example.helloworldmvc.domain;
 
 import com.example.helloworldmvc.domain.common.BaseEntity;
 import com.example.helloworldmvc.domain.enums.UserLanguage;
+import com.example.helloworldmvc.domain.mapping.AvailableLanguage;
 import com.example.helloworldmvc.domain.mapping.Reservation;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,10 +25,6 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'ENGLISH'")
-    private UserLanguage language;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Summary> userSummaryList = new ArrayList<>();
 
@@ -36,5 +33,8 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Reservation> reservationList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<AvailableLanguage> availableLanguageList = new ArrayList<>();
 }
 

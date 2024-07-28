@@ -1,6 +1,7 @@
 package com.example.helloworldmvc.domain;
 
 import com.example.helloworldmvc.domain.enums.UserLanguage;
+import com.example.helloworldmvc.domain.mapping.AvailableLanguage;
 import com.example.helloworldmvc.domain.mapping.Reservation;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,9 +23,6 @@ public class Counselor {
     @Column(nullable = false, length = 20)
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'ENGLISH'")
-    private UserLanguage language;
 
     @Column(nullable = true)
     private LocalDateTime start;
@@ -36,4 +34,6 @@ public class Counselor {
     @JoinColumn(name = "center_id")
     private Center center;
 
+    @OneToMany(mappedBy = "counselor")
+    private List<AvailableLanguage> availableLanguageList = new ArrayList<>();
 }
