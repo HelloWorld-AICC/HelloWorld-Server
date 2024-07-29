@@ -1,6 +1,7 @@
 package com.example.helloworldmvc.domain;
 
-import com.example.helloworldmvc.domain.mapping.AvailableLanguage;
+import com.example.helloworldmvc.domain.mapping.CounselorLanguage;
+import com.example.helloworldmvc.domain.mapping.UserLanguage;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,9 @@ public class Language {
     @Column(nullable = false, length = 10)
     private String name;
 
-    @OneToMany(mappedBy = "language", fetch = FetchType.LAZY)
-    private List<AvailableLanguage> availableLanguages = new ArrayList<>();
+    @OneToMany(mappedBy = "language", cascade = CascadeType.ALL)
+    private List<UserLanguage> userLanguages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "language", cascade = CascadeType.ALL)
+    private List<CounselorLanguage> counselorLanguages = new ArrayList<>();
 }

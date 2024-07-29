@@ -29,7 +29,8 @@ ErrorStatus implements BaseErrorCode {
 
 
     // 센터 관련 응답
-    CENTER_NOT_FOUND(HttpStatus.NOT_FOUND,"CENTER4001", "센터를 찾을수 없습니다.");
+    CENTER_NOT_FOUND(HttpStatus.NOT_FOUND,"CENTER4001", "센터를 찾을수 없습니다."),
+    LANGUAGE_NOT_MATCHING(HttpStatus.NOT_FOUND, "CENTER4003", "해당 언어의 상담사가 없습니다.");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

@@ -1,5 +1,6 @@
 package com.example.helloworldmvc.web.dto;
 
+import com.example.helloworldmvc.domain.Language;
 import com.example.helloworldmvc.domain.enums.CenterStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,5 +33,25 @@ public class CenterResponseDTO {
         String image;
         Double latitude;
         Double longitude;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CounselorListRes {
+        LocalDateTime today;
+        List<CounselorRes> counselorList;
+    }
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CounselorRes {
+        String name;
+        String centerName;
+        List<String> language;
+        LocalDateTime start;
+        LocalDateTime end;
     }
 }
