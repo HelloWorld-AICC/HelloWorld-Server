@@ -21,4 +21,12 @@ public class UserLanguage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "language_id")
     private Language language;
+
+    public void setUser(User user) {
+        if(this.user != null){
+            user.getUserLanguageList().remove(this);
+        }
+        this.user = user;
+        user.getUserLanguageList().add(this);
+    }
 }

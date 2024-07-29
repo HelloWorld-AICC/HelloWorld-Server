@@ -4,7 +4,9 @@ import com.example.helloworldmvc.apiPayload.ApiResponse;
 import com.example.helloworldmvc.converter.CenterConverter;
 import com.example.helloworldmvc.domain.Center;
 import com.example.helloworldmvc.domain.Counselor;
+import com.example.helloworldmvc.domain.User;
 import com.example.helloworldmvc.service.CenterService;
+import com.example.helloworldmvc.web.dto.CenterRequestDTO;
 import com.example.helloworldmvc.web.dto.CenterResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,6 +14,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -54,10 +57,26 @@ public class CenterController {
             @Parameter(name = "size", description = "query string(RequestParam) - 몇 개씩 불러올지 개수를 세는 변수 (1 이상 자연수로 설정)")
     })
     public ApiResponse<CenterResponseDTO.CounselorListRes> getCenterReservation(@RequestHeader("user_id") Long userId,
-                                               @RequestParam(name = "page") Integer page,
-                                               @RequestParam(name = "size") Integer size){
+                                                                                @RequestParam(name = "page") Integer page,
+                                                                                @RequestParam(name = "size") Integer size) {
         Page<Counselor> counselorList = centerService.getCounselorList(userId, page, size);
         return ApiResponse.onSuccess(CenterConverter.toCounselorListRes(counselorList));
     }
 
+    @PostMapping("/{center_id}/filter")
+    @Operation(summary = "상담가능 언어 필터링 생성 API", description = "해당 센터의 상담가능한 상담사를 찾기 위해 필터링을 생성하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "CENTER4001", description = "센터를 찾을수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4002", description = "설정 가능한 언어가 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user_id", description = "RequestHeader - 로그인한 사용자 아이디(accessToken으로 변경 예정)")
+            }
+    )
+    public ApiResponse<CenterResponseDTO.FilterRes> createLanguageFilter(@RequestHeader("user_id") Long userId,
+                                                                         @RequestBody @Valid CenterRequestDTO.FilterLanguageReq request) {
+        User userLanguage = centerService.createUserLanguage(userId, request);
+        return ApiResponse.onSuccess(CenterConverter.toFilterRes(userLanguage));
+    }
 }
