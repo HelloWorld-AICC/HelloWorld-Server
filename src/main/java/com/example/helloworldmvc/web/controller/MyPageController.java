@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/my-page")
+@RequestMapping("/myPage")
 public class MyPageController {
     private final MyPageService myPageService;
 
@@ -38,8 +38,8 @@ public class MyPageController {
         return ApiResponse.onSuccess(MyPageConverter.toMyPageRes(user));
     }
 
-    @GetMapping("/AllConsultations")
-    @Operation(summary = "전체 상담 히스토리 API", description = "(외국인)내 전체 상담 히스토리 화면 API입니다.")
+    @GetMapping("/allSummary")
+    @Operation(summary = "전체 상담 조회 API", description = "(외국인)내 전체 상담 조회 화면 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4001", description = "사용자를 찾을수 없습니다.")
@@ -54,6 +54,18 @@ public class MyPageController {
                                         @RequestParam(name = "size") Integer size){
         Page<Summary> summaryList = myPageService.getSummaryList(userId, page, size);
         return ApiResponse.onSuccess(MyPageConverter.toAllSummaryListRes(summaryList));
+    }
+
+    @GetMapping("/detailSummary")
+    @Operation(summary = "상세 상담 조회 API", description = "(외국인,상담사)상세 상담 조회 화면 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4001", description = "사용자를 찾을수 없습니다.")
+    })
+    public ApiResponse<?> getDetailSummary(@RequestParam("summary-id") Long summaryId){
+        Summary summary=myPageService.getSummary(summaryId);
+
+        return ApiResponse.onSuccess(MyPageConverter.toDetailSummaryRes(summary));
     }
 
 }

@@ -40,6 +40,7 @@ public class MyPageConverter {
             userImg = userFileOptional.get().getUrl();
         }
         return MyPageResponseDTO.AllSummaryRes.builder()
+                .summaryId(summary.getId())
                 .identificationNum(summary.getIdentificationNum())
                 .uploadedAt(summary.getUpdateAt())
                 .name(user.getName())
@@ -55,4 +56,29 @@ public class MyPageConverter {
                 .allsummaryList(allSummaryRes)
                 .build();
     }
+
+    public static MyPageResponseDTO.DetailSummaryRes toDetailSummaryRes(Summary summary){
+        User user=summary.getUser();
+        String userImg = null;
+        Optional<File> userFileOptional = Optional.ofNullable(user.getFile());
+        if (userFileOptional.isPresent()) {
+            userImg = userFileOptional.get().getUrl();
+        }
+        return MyPageResponseDTO.DetailSummaryRes.builder()
+                .summaryId(summary.getId())
+                .identificationNum(summary.getIdentificationNum())
+                .uploadedAt(summary.getUpdateAt())
+                .name(user.getName())
+                .userImg(userImg)
+                .chatSummary(summary.getChatSummary())
+                .mainPoint(summary.getMainPoint())
+                .build();
+    }
 }
+//    Long summaryId;
+//    String identificationNum;
+//    LocalDateTime uploadedAt;
+//    String name;
+//    String userImg;
+//    String chatSummary;
+//    String mainPoint;

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 
 public interface MyPageService {
     User getUser(Long userId);
+    Summary getSummary(Long summaryId);
     Page<Summary> getSummaryList(Long userId, Integer page, Integer size);
 
 }

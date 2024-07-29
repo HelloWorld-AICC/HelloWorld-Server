@@ -1,6 +1,9 @@
 package com.example.helloworldmvc.web.dto;
 
 import com.example.helloworldmvc.domain.File;
+import com.example.helloworldmvc.domain.User;
+import com.example.helloworldmvc.domain.enums.SummaryStatus;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,10 +35,25 @@ public class MyPageResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AllSummaryRes{
+        Long summaryId;
         String identificationNum;
         LocalDateTime uploadedAt;
         String name;
         String userImg;
         String title;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DetailSummaryRes{
+        Long summaryId;
+        String identificationNum;
+        LocalDateTime uploadedAt;
+        String name;
+        String userImg;
+        String chatSummary;
+        String mainPoint;
     }
 }

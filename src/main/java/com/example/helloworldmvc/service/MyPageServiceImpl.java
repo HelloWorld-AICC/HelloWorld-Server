@@ -30,6 +30,11 @@ public class MyPageServiceImpl implements MyPageService{
     }
 
     @Override
+    public Summary getSummary(Long summaryId) {
+        return summaryRepository.findById(summaryId).orElseThrow(() -> new GeneralException(ErrorStatus.SUMMARY_NOT_FOUND));
+    }
+
+    @Override
     public Page<Summary> getSummaryList(Long userId, Integer page, Integer size) {
         userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         return summaryRepository.findAllByUserId(userId, PageRequest.of(page, size));
