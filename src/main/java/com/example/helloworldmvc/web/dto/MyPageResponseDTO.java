@@ -56,4 +56,24 @@ public class MyPageResponseDTO {
         String chatSummary;
         String mainPoint;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AllReservationListRes {
+        List<MyPageResponseDTO.AllReservationRes> allReservationList;
+    }
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AllReservationRes{
+        Long summaryId;
+        String identificationNum;
+        LocalDateTime uploadedAt;
+        String name;
+        String userImg;
+        String title;
+    }
 }

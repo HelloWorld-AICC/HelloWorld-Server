@@ -28,4 +28,6 @@ public class Reservation {
     @JoinColumn(name = "counselor_id")
     private Counselor counselor;
 
+
+
 }

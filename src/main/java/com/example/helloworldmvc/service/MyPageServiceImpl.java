@@ -7,6 +7,9 @@ import com.example.helloworldmvc.domain.Center;
 import com.example.helloworldmvc.domain.File;
 import com.example.helloworldmvc.domain.Summary;
 import com.example.helloworldmvc.domain.User;
+import com.example.helloworldmvc.domain.mapping.Reservation;
+import com.example.helloworldmvc.repository.CounselorRepository;
+import com.example.helloworldmvc.repository.ReservationRepository;
 import com.example.helloworldmvc.repository.SummaryRepository;
 import com.example.helloworldmvc.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -23,6 +26,9 @@ import java.util.Optional;
 public class MyPageServiceImpl implements MyPageService{
     private final UserRepository userRepository;
     private final SummaryRepository summaryRepository;
+    private final CounselorRepository counselorRepository;
+    private final ReservationRepository reservationRepository;
+
 
     @Override
     public User getUser(Long userId) {
@@ -38,5 +44,11 @@ public class MyPageServiceImpl implements MyPageService{
     public Page<Summary> getSummaryList(Long userId, Integer page, Integer size) {
         userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         return summaryRepository.findAllByUserId(userId, PageRequest.of(page, size));
+    }
+
+    @Override
+    public Page<Reservation> getReservationList(Long counselorId, Integer page, Integer size) {
+        counselorRepository.findById(counselorId).orElseThrow(() -> new GeneralException(ErrorStatus.COUNSELOR_NOT_FOUND));
+        return reservationRepository.findAllByCounselorId(counselorId, PageRequest.of(page, size));
     }
 }
