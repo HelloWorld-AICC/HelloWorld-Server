@@ -57,4 +57,10 @@ public class CenterConverter {
                 .build();
     }
 
+    public static CenterResponseDTO.CenterDetailRes toCenterDetailRes(Center center) {
+        return CenterResponseDTO.CenterDetailRes.builder()
+                .detail(center.getDetails())
+                .build();
+    }
+
 }

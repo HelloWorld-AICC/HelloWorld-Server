@@ -62,4 +62,11 @@ public class CenterResponseDTO {
     public static class FilterRes {
         Long userId;
     }
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CenterDetailRes {
+        String detail;
+    }
 }
