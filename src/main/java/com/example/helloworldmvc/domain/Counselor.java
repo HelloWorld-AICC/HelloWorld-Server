@@ -36,4 +36,7 @@ public class Counselor {
 
     @OneToMany(mappedBy = "counselor")
     private List<AvailableLanguage> availableLanguageList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "counselor", cascade = CascadeType.ALL)
+    private List<Reservation> reservationList = new ArrayList<>();
 }

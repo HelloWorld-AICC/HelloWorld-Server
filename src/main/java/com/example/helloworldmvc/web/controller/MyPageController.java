@@ -6,6 +6,7 @@ import com.example.helloworldmvc.converter.MyPageConverter;
 import com.example.helloworldmvc.domain.Center;
 import com.example.helloworldmvc.domain.Summary;
 import com.example.helloworldmvc.domain.User;
+import com.example.helloworldmvc.domain.mapping.Reservation;
 import com.example.helloworldmvc.service.CenterService;
 import com.example.helloworldmvc.service.MyPageService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -68,4 +69,21 @@ public class MyPageController {
         return ApiResponse.onSuccess(MyPageConverter.toDetailSummaryRes(summary));
     }
 
+    @GetMapping("/allReservation")
+    @Operation(summary = "상담 신청 내역 조회 API", description = "(상담사)상담 신청 내역 조회 화면 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4001", description = "사용자를 찾을수 없습니다.")
+    })
+    @Parameters({
+            @Parameter(name = "counselor_id", description = "RequestHeader - 로그인한 상담사 아이디(accessToken으로 변경 예정)"),
+            @Parameter(name = "page", description = "query string(RequestParam) - 몇번째 페이지인지 가리키는 page 변수 입니다! (0부터 시작)"),
+            @Parameter(name = "size", description = "query string(RequestParam) - 몇 개씩 불러올지 개수를 세는 변수입니다. (1 이상 자연수로 설정)"),
+    })
+    public ApiResponse<?> getAllReservation(@RequestHeader("counselor_id") Long userId,
+                                        @RequestParam(name = "page") Integer page,
+                                        @RequestParam(name = "size") Integer size){
+        Page<Reservation> reservationList = myPageService.getReservationList(userId, page, size);
+        return ApiResponse.onSuccess(MyPageConverter.toAllReservationListRes(reservationList));
+    }
 }
