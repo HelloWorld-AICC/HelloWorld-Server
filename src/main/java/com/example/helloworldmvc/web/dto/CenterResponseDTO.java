@@ -54,4 +54,12 @@ public class CenterResponseDTO {
         LocalDateTime start;
         LocalDateTime end;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FilterRes {
+        Long userId;
+    }
 }

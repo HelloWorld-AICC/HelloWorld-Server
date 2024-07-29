@@ -2,11 +2,14 @@ package com.example.helloworldmvc.converter;
 
 import com.example.helloworldmvc.domain.Center;
 import com.example.helloworldmvc.domain.Counselor;
+import com.example.helloworldmvc.domain.User;
+import com.example.helloworldmvc.web.dto.CenterRequestDTO;
 import com.example.helloworldmvc.web.dto.CenterResponseDTO;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class CenterConverter {
@@ -47,4 +50,11 @@ public class CenterConverter {
                 .end(counselor.getEnd())
                 .build();
     }
+
+    public static CenterResponseDTO.FilterRes toFilterRes(User user) {
+        return CenterResponseDTO.FilterRes.builder()
+                .userId(user.getId())
+                .build();
+    }
+
 }
