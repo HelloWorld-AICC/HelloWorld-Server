@@ -1,8 +1,7 @@
 package com.example.helloworldmvc.domain;
 
 import com.example.helloworldmvc.domain.common.BaseEntity;
-import com.example.helloworldmvc.domain.enums.UserLanguage;
-import com.example.helloworldmvc.domain.mapping.AvailableLanguage;
+import com.example.helloworldmvc.domain.mapping.UserLanguage;
 import com.example.helloworldmvc.domain.mapping.Reservation;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,6 +34,7 @@ public class User extends BaseEntity {
     private List<Reservation> reservationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<AvailableLanguage> availableLanguageList = new ArrayList<>();
+    private List<UserLanguage> userLanguageList = new ArrayList<>();
+
 }
 

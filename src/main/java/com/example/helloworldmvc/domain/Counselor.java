@@ -1,8 +1,7 @@
 package com.example.helloworldmvc.domain;
 
-import com.example.helloworldmvc.domain.enums.UserLanguage;
-import com.example.helloworldmvc.domain.mapping.AvailableLanguage;
-import com.example.helloworldmvc.domain.mapping.Reservation;
+import com.example.helloworldmvc.domain.mapping.CounselorLanguage;
+import com.example.helloworldmvc.domain.mapping.UserLanguage;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,6 +33,8 @@ public class Counselor {
     @JoinColumn(name = "center_id")
     private Center center;
 
-    @OneToMany(mappedBy = "counselor")
-    private List<AvailableLanguage> availableLanguageList = new ArrayList<>();
+    @OneToMany(mappedBy = "counselor", cascade = CascadeType.ALL)
+    private List<CounselorLanguage> counselorLanguageList = new ArrayList<>();
+
+
 }

@@ -1,9 +1,11 @@
 package com.example.helloworldmvc.converter;
 
 import com.example.helloworldmvc.domain.Center;
+import com.example.helloworldmvc.domain.Counselor;
 import com.example.helloworldmvc.web.dto.CenterResponseDTO;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,24 @@ public class CenterConverter {
                 .map(CenterConverter::toCenterMapRes).collect(Collectors.toList());
         return CenterResponseDTO.CenterMapListRes.builder()
                 .centerMapList(centerMapRes)
+                .build();
+    }
+
+    public static CenterResponseDTO.CounselorListRes toCounselorListRes(Page<Counselor> counselorList) {
+        List<CenterResponseDTO.CounselorRes> counselorResList = counselorList.stream()
+                .map(CenterConverter::toCounselorRes).collect(Collectors.toList());
+        return CenterResponseDTO.CounselorListRes.builder()
+                .today(LocalDateTime.now())
+                .counselorList(counselorResList)
+                .build();
+    }
+    public static CenterResponseDTO.CounselorRes toCounselorRes(Counselor counselor) {
+        return CenterResponseDTO.CounselorRes.builder()
+                .name(counselor.getName())
+                .centerName(counselor.getCenter().getName())
+                .language(counselor.getCounselorLanguageList().stream().map(s -> s.getLanguage().getName()).collect(Collectors.toList()))
+                .start(counselor.getStart())
+                .end(counselor.getEnd())
                 .build();
     }
 }
