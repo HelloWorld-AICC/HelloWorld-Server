@@ -15,9 +15,15 @@ public class Summary extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 100)
+    private String identificationNum;
+
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10) DEFAULT 'EMPTY'")
     private SummaryStatus status;
+
+    @Column(nullable = false, length = 30)
+    private String title;
 
     @Column(nullable = false, length = 255)
     private String chatSummary;
