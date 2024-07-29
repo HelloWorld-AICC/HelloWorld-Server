@@ -22,6 +22,10 @@ ErrorStatus implements BaseErrorCode {
     // 사용자 관련 응답
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "사용자를 찾을수 없습니다."),
 
+    // 요약문 관련 응답
+    SUMMARY_NOT_FOUND(HttpStatus.NOT_FOUND, "SUMMARY4001", "요약본을 찾을수 없습니다."),
+
+
     // 센터 관련 응답
     CENTER_NOT_FOUND(HttpStatus.NOT_FOUND,"CENTER4001", "센터를 찾을수 없습니다.");
     private final HttpStatus httpStatus;
