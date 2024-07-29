@@ -13,4 +13,6 @@ public interface CenterService {
     Page<Counselor> getCounselorList(Long userId, Integer page, Integer size);
 
     User createUserLanguage(Long userId, CenterRequestDTO.FilterLanguageReq request);
+
+    Center getCenter(Long userId, Long centerId);
 }

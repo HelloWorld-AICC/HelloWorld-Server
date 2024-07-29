@@ -28,7 +28,7 @@ public class CenterServiceImpl implements CenterService {
     private final CenterRepository centerRepository;
     private final CounselorRepository counselorRepository;
     private final LanguageRepository languageRepository;
-    private final UserLanguageRepository userLanguageRepository;
+
 
     @Override
     public Page<Center> getCenterList(Long userId, Integer page, Integer size) {
@@ -55,5 +55,11 @@ public class CenterServiceImpl implements CenterService {
         List<UserLanguage> userLanguageList = UserLanguageConverter.toUserLanguage(languageList);
         userLanguageList.forEach(language -> language.setUser(user));
         return userRepository.save(user);
+    }
+
+    @Override
+    public Center getCenter(Long userId, Long centerId) {
+        userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        return centerRepository.findById(centerId).orElseThrow(() -> new GeneralException(ErrorStatus.CENTER_NOT_FOUND));
     }
 }
