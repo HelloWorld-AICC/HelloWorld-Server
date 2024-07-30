@@ -10,9 +10,9 @@ import org.springframework.data.domain.Page;
 public interface CenterService {
     Page<Center> getCenterList(Long userId, Integer page, Integer size);
 
-    Page<Counselor> getCounselorList(Long userId, Integer page, Integer size);
+    Page<Counselor> getCounselorList(Long userId, Long centerid, Integer page, Integer size);
 
-    User createUserLanguage(Long userId, CenterRequestDTO.FilterLanguageReq request);
+    User createUserLanguage(Long userId, Long centerId, CenterRequestDTO.FilterLanguageReq request);
 
     Center getCenter(Long userId, Long centerId);
 }

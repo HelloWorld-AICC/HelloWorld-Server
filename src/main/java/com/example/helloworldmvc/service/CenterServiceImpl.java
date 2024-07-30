@@ -37,21 +37,23 @@ public class CenterServiceImpl implements CenterService {
     }
 
     @Override
-    public Page<Counselor> getCounselorList(Long userId, Integer page, Integer size) {
+    public Page<Counselor> getCounselorList(Long userId, Long centerId, Integer page, Integer size) {
         User user = userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        centerRepository.findById(centerId).orElseThrow(() -> new GeneralException(ErrorStatus.CENTER_NOT_FOUND));
         List<Long> languageId = user.getUserLanguageList().stream()
                 .map(language -> language.getLanguage().getId()).collect(Collectors.toList());
-        return counselorRepository.findAllByCounselorLanguageList(languageId, PageRequest.of(page, size));
+        return counselorRepository.findAllByCounselorLanguageList(languageId, centerId, PageRequest.of(page, size));
 
     }
 
     @Override
-    public User createUserLanguage(Long userId, CenterRequestDTO.FilterLanguageReq request) {
+    public User createUserLanguage(Long userId, Long centerId, CenterRequestDTO.FilterLanguageReq request) {
         User user = userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         List<Language> languageList = request.getLanguageList().stream()
                 .map(language -> {
                     return languageRepository.findById(language).orElseThrow(() -> new GeneralException(ErrorStatus.LANGUAGE_NOT_FOUND));
                 }).collect(Collectors.toList());
+        centerRepository.findById(centerId).orElseThrow(() -> new GeneralException(ErrorStatus.CENTER_NOT_FOUND));
         List<UserLanguage> userLanguageList = UserLanguageConverter.toUserLanguage(languageList);
         userLanguageList.forEach(language -> language.setUser(user));
         return userRepository.save(user);
