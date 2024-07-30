@@ -17,3 +17,19 @@ spring:
         hbm2ddl:
           auto: update
         default_batch_fetch_size: 1000
+  redis:
+    data:
+      host: ${REDIS_HOSTNAME}
+      port: ${REDIS_PORT}
+  jwt:
+    secret: ${JWT_SECRET}
+google:
+  auth:
+    url: https://oauth2.googleapis.com
+  login:
+    url: https://accounts.google.com/o/oauth2/v2/auth?
+  redirect:
+    url: ${REDIRECT_URL}
+  client:
+    id: ${GOOGLE_ID}
+    pw: ${GOOGLE_PWD}
