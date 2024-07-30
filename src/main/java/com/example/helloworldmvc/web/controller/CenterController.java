@@ -60,7 +60,7 @@ public class CenterController {
                                                                                 @PathVariable("center_id") Long centerId,
                                                                                 @RequestParam(name = "page") Integer page,
                                                                                 @RequestParam(name = "size") Integer size) {
-        Page<Counselor> counselorList = centerService.getCounselorList(userId, page, size);
+        Page<Counselor> counselorList = centerService.getCounselorList(userId, centerId , page, size);
         return ApiResponse.onSuccess(CenterConverter.toCounselorListRes(counselorList));
     }
 
@@ -77,7 +77,7 @@ public class CenterController {
     public ApiResponse<CenterResponseDTO.FilterRes> createLanguageFilter(@RequestHeader("user_id") Long userId,
                                                                          @PathVariable("center_id") Long centerId,
                                                                          @RequestBody @Valid CenterRequestDTO.FilterLanguageReq request) {
-        User userLanguage = centerService.createUserLanguage(userId, request);
+        User userLanguage = centerService.createUserLanguage(userId, centerId, request);
         return ApiResponse.onSuccess(CenterConverter.toFilterRes(userLanguage));
     }
 
