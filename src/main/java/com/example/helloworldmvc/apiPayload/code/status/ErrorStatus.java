@@ -23,6 +23,7 @@ ErrorStatus implements BaseErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "사용자를 찾을수 없습니다."),
     LANGUAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4002", "설정 가능한 언어가 없습니다."),
     COUNSELOR_NOT_FOUND(HttpStatus.NOT_FOUND, "COUNSELOR4001", "상담사를 찾을수 없습니다."),
+    INVALID_JWT(HttpStatus.UNAUTHORIZED, "USER4003", "유효하지 않은 JWT입니다."),
 
 
     // 요약문 관련 응답

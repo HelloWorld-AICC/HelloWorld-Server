@@ -1,9 +1,11 @@
 package com.example.helloworldmvc.domain;
 
 import com.example.helloworldmvc.domain.common.BaseEntity;
+import com.example.helloworldmvc.domain.enums.Role;
 import com.example.helloworldmvc.domain.mapping.UserLanguage;
 import com.example.helloworldmvc.domain.mapping.Reservation;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -25,8 +27,10 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 30)
     private String email;
 
-    @Column(nullable = false, length = 100)
-    private String password;
+    @Enumerated(EnumType.STRING) // Enum 타입은 문자열 형태로 저장해야 함
+    @NotNull
+    private Role role;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Summary> userSummaryList = new ArrayList<>();
@@ -39,6 +43,15 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserLanguage> userLanguageList = new ArrayList<>();
+
+    public User update(String name) {
+        this.name = name;
+
+        return this;
+    }
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
 
 }
 
