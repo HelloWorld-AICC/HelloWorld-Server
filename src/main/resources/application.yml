@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/summary
+    url: jdbc:mysql://localhost:3307/summary
     username: root
     password: ${MY_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -17,6 +17,10 @@ spring:
         hbm2ddl:
           auto: update
         default_batch_fetch_size: 1000
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
   redis:
     data:
       host: ${REDIS_HOSTNAME}
@@ -33,3 +37,17 @@ google:
   client:
     id: ${GOOGLE_ID}
     pw: ${GOOGLE_PWD}
+
+cloud:
+  aws:
+    s3:
+      bucket: sseksak
+      path:
+        user : user
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
