@@ -19,10 +19,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MyPageConverter {
+
     public static MyPageResponseDTO.MyPageResDTO toMyPageRes(User user){
         String userImg = null;
 
         Optional<File> userFileOptional = Optional.ofNullable(user.getFile());
+        if(userFileOptional.isPresent())userImg=user.getFile().getUrl();
 
         if (userFileOptional.isPresent()) {
             userImg = userFileOptional.get().getUrl();

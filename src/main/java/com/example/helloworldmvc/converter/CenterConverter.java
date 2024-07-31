@@ -2,6 +2,7 @@ package com.example.helloworldmvc.converter;
 
 import com.example.helloworldmvc.domain.Center;
 import com.example.helloworldmvc.domain.Counselor;
+import com.example.helloworldmvc.domain.File;
 import com.example.helloworldmvc.domain.User;
 import com.example.helloworldmvc.web.dto.CenterRequestDTO;
 import com.example.helloworldmvc.web.dto.CenterResponseDTO;
@@ -10,16 +11,23 @@ import org.springframework.data.domain.Page;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CenterConverter {
     public static CenterResponseDTO.CenterMapRes toCenterMapRes(Center center) {
+        String centerImg = null;
+        Optional<File> centerFileOptional = Optional.ofNullable(center.getFile());
+        if (centerFileOptional.isPresent()) {
+            centerImg = centerFileOptional.get().getUrl();
+        }
         return CenterResponseDTO.CenterMapRes.builder()
                 .name(center.getName())
                 .status(center.getStatus())
                 .closed(center.getDeadLine())
                 .address(center.getAddress())
-                .image(center.getFile().getUrl())
+//                .image(center.getFile().getUrl())
+                .image(centerImg)
                 .latitude(center.getLatitude())
                 .longitude(center.getLongitude())
                 .build();
