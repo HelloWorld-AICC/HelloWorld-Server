@@ -22,4 +22,9 @@ public class File {
     @OneToOne
     @JoinColumn(name = "center_id")
     private Center center;
+
+    public void setUrl(String imageUrl){
+        this.url = imageUrl;
+    }
+
 }
