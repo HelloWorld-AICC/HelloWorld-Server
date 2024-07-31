@@ -78,13 +78,17 @@ public class GoogleServiceImpl implements GoogleService {
             tokenDTOList.add(accessToken);
 
             return tokenDTOList;
-        } else {
+        }  else {
             User user = userRepository.save(UserConverter.toGoogleUser(googleProfile));
             TokenDTO accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
             TokenDTO refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
             redisTemplate.opsForValue().set("RT:" + refreshToken, TimeUnit.MILLISECONDS);
 
-            return (List<TokenDTO>) UserConverter.toOAuthResponse(false, accessToken, refreshToken, user);
+            List<TokenDTO> tokenDTOList = new ArrayList<>();
+            tokenDTOList.add(refreshToken);
+            tokenDTOList.add(accessToken);
+
+            return tokenDTOList;
         }
     }
 }
