@@ -9,15 +9,20 @@ import com.example.helloworldmvc.domain.User;
 import com.example.helloworldmvc.domain.mapping.Reservation;
 import com.example.helloworldmvc.service.CenterService;
 import com.example.helloworldmvc.service.MyPageService;
+import com.example.helloworldmvc.web.dto.CenterRequestDTO;
+import com.example.helloworldmvc.web.dto.CenterResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -85,5 +90,20 @@ public class MyPageController {
                                         @RequestParam(name = "size") Integer size){
         Page<Reservation> reservationList = myPageService.getReservationList(userId, page, size);
         return ApiResponse.onSuccess(MyPageConverter.toAllReservationListRes(reservationList));
+    }
+
+    @PostMapping(value="/setProfile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "프로필 변경 API", description = "프로필 변경 API API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+
+    })
+    @Parameters({
+            @Parameter(name = "user_id", description = "RequestHeader - 로그인한 사용자 아이디(accessToken으로 변경 예정)")
+    })
+    public ApiResponse<CenterResponseDTO.FilterRes> createLanguageFilter(@RequestHeader("user_id") Long userId,
+                                                                         @RequestParam("file") MultipartFile file) {
+        myPageService.setUserProfile(userId, file);
+        return ApiResponse.onSuccess(null);
     }
 }
