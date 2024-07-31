@@ -13,11 +13,11 @@ public class UserConverter {
                 .name(googleProfile.getName())
                 .build();
     }
-    public static UserResponseDTO.OAuthResponse toOAuthResponse(Boolean isLogin, TokenDTO accessToken, TokenDTO refreshToken, User user) {
+    public static UserResponseDTO.OAuthResponse toOAuthResponse(TokenDTO accessToken, TokenDTO refreshToken, Boolean isLogin, User user) {
         return UserResponseDTO.OAuthResponse.builder()
-                .isLogin(isLogin)
                 .refreshToken(refreshToken)
                 .accessToken(accessToken)
+                .isLogin(isLogin)
                 .email(user.getEmail())
                 .build();
     }
