@@ -32,6 +32,7 @@ public class CenterConverter {
             currentStatus=CenterStatus.CLOSED;
         }
         return CenterResponseDTO.CenterMapRes.builder()
+                .centerId(center.getId())
                 .name(center.getName())
                 .status(currentStatus)
                 .closed(center.getClosed().toString())
