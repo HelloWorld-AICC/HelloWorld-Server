@@ -4,11 +4,13 @@ import com.example.helloworldmvc.domain.Center;
 import com.example.helloworldmvc.domain.Counselor;
 import com.example.helloworldmvc.domain.File;
 import com.example.helloworldmvc.domain.User;
+import com.example.helloworldmvc.domain.enums.CenterStatus;
 import com.example.helloworldmvc.web.dto.CenterRequestDTO;
 import com.example.helloworldmvc.web.dto.CenterResponseDTO;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -21,12 +23,20 @@ public class CenterConverter {
         if (centerFileOptional.isPresent()) {
             centerImg = centerFileOptional.get().getUrl();
         }
+        CenterStatus currentStatus=null;
+        LocalTime now = LocalTime.now();
+        if(now.isAfter(center.getOpened())&&now.isBefore(center.getClosed())){
+            currentStatus=CenterStatus.OPEN;
+        }
+        else{
+            currentStatus=CenterStatus.CLOSED;
+        }
         return CenterResponseDTO.CenterMapRes.builder()
                 .name(center.getName())
-                .status(center.getStatus())
-                .closed(center.getDeadLine())
+                .status(currentStatus)
+                .closed(center.getClosed().toString())
                 .address(center.getAddress())
-//                .image(center.getFile().getUrl())
+                .image(center.getFile().getUrl())
                 .image(centerImg)
                 .latitude(center.getLatitude())
                 .longitude(center.getLongitude())

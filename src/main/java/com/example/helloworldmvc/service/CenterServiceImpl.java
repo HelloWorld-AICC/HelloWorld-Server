@@ -31,10 +31,10 @@ public class CenterServiceImpl implements CenterService {
 
 
     @Override
-    public Page<Center> getCenterList(Long userId, Integer page, Integer size) {
-        userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
-        return centerRepository.findAll(PageRequest.of(page, size));
+    public Page<Center> getCenterListByDistance(double latitude, double longitude, Integer page, Integer size) {
+        return centerRepository.findAllOrderByDistance(latitude, longitude, PageRequest.of(page, size));
     }
+
 
     @Override
     public Page<Counselor> getCounselorList(Long userId, Long centerId, Integer page, Integer size) {

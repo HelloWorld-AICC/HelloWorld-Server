@@ -27,7 +27,7 @@ public class CenterResponseDTO {
     public static class CenterMapRes {
         String name;
         CenterStatus status;
-        LocalDateTime closed;
+        String closed;
         String address;
         //MultipartFile 형으로 변경예정
         String image;
