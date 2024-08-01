@@ -25,7 +25,7 @@ services:
   mysql:
     image: mysql:8
     environment:
-      MYSQL_ROOT_PASSWORD: 5736kr
+      MYSQL_ROOT_PASSWORD: ${MY_PASSWORD}
       MYSQL_DATABASE: summary
       MYSQL_USER: root
       MYSQL_PASSWORD: ${MY_PASSWORD}
