@@ -19,6 +19,7 @@ public class MyPageResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MyPageResDTO{
+        Long userId;
         String name;
         String userImg;
     }
@@ -28,6 +29,7 @@ public class MyPageResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AllSummaryListRes {
+        Long userId;
         List<MyPageResponseDTO.AllSummaryRes> allsummaryList;
     }
     @Builder
@@ -48,6 +50,7 @@ public class MyPageResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class DetailSummaryRes{
+        Long userId;
         Long summaryId;
         String identificationNum;
         LocalDateTime uploadedAt;
@@ -62,6 +65,7 @@ public class MyPageResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AllReservationListRes {
+        Long userId;
         List<MyPageResponseDTO.AllReservationRes> allReservationList;
     }
     @Builder
