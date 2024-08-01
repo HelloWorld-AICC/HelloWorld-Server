@@ -64,8 +64,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }}
         run:
           aws deploy create-deployment \
-          --application-name coinTalk[만든 애플리케이션 이름] \
-          --deployment-group-name coinTalk-group[만든 애플리케이션 그룹 이름] \
+          --application-name hello-world \
+          --deployment-group-name hello-world-group \
           --file-exists-behavior OVERWRITE \
-          --s3-location bucket=cointalk-deploy[S3버킷이름],bundleType=zip,key=coinTalk.zip[S3버킷 속 압축파일] \ 
+          --s3-location bucket=ec2-cicd-bucket,bundleType=zip,key=helloWorld.zip \ 
           --region ap-northeast-2
