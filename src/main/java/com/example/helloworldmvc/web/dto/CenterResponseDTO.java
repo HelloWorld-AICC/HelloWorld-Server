@@ -25,6 +25,7 @@ public class CenterResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CenterMapRes {
+        Long centerId;
         String name;
         CenterStatus status;
         String closed;
