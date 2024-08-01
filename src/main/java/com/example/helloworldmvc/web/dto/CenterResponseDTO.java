@@ -18,6 +18,7 @@ public class CenterResponseDTO {
     @AllArgsConstructor
     public static class CenterMapListRes {
         List<CenterResponseDTO.CenterMapRes> centerMapList;
+        Long userId;
     }
 
     @Builder
@@ -43,6 +44,7 @@ public class CenterResponseDTO {
     public static class CounselorListRes {
         LocalDateTime today;
         List<CounselorRes> counselorList;
+        Long userId;
     }
     @Builder
     @Getter
@@ -69,5 +71,6 @@ public class CenterResponseDTO {
     @AllArgsConstructor
     public static class CenterDetailRes {
         String detail;
+        Long userId;
     }
 }

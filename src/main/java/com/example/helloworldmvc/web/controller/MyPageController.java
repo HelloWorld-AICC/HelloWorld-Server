@@ -59,7 +59,7 @@ public class MyPageController {
                                         @RequestParam(name = "page") Integer page,
                                         @RequestParam(name = "size") Integer size){
         Page<Summary> summaryList = myPageService.getSummaryList(userId, page, size);
-        return ApiResponse.onSuccess(MyPageConverter.toAllSummaryListRes(summaryList));
+        return ApiResponse.onSuccess(MyPageConverter.toAllSummaryListRes(summaryList,userId));
     }
 
     @GetMapping("/detailSummary")
@@ -89,7 +89,7 @@ public class MyPageController {
                                         @RequestParam(name = "page") Integer page,
                                         @RequestParam(name = "size") Integer size){
         Page<Reservation> reservationList = myPageService.getReservationList(userId, page, size);
-        return ApiResponse.onSuccess(MyPageConverter.toAllReservationListRes(reservationList));
+        return ApiResponse.onSuccess(MyPageConverter.toAllReservationListRes(reservationList,userId));
     }
 
     @PostMapping(value="/setProfile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -101,9 +101,9 @@ public class MyPageController {
     @Parameters({
             @Parameter(name = "user_id", description = "RequestHeader - 로그인한 사용자 아이디(accessToken으로 변경 예정)")
     })
-    public ApiResponse<CenterResponseDTO.FilterRes> createLanguageFilter(@RequestHeader("user_id") Long userId,
+    public ApiResponse<Long> createLanguageFilter(@RequestHeader("user_id") Long userId,
                                                                          @RequestParam("file") MultipartFile file) {
         myPageService.setUserProfile(userId, file);
-        return ApiResponse.onSuccess(null);
+        return ApiResponse.onSuccess(userId);
     }
 }

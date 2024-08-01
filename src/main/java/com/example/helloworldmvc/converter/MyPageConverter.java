@@ -30,6 +30,7 @@ public class MyPageConverter {
             userImg = userFileOptional.get().getUrl();
         }
         return MyPageResponseDTO.MyPageResDTO.builder()
+                .userId(user.getId())
                 .name(user.getName())
                 .userImg(userImg)
                 .build();
@@ -53,10 +54,11 @@ public class MyPageConverter {
                 .build();
     }
 
-    public static MyPageResponseDTO.AllSummaryListRes toAllSummaryListRes(Page<Summary> summaryList) {
+    public static MyPageResponseDTO.AllSummaryListRes toAllSummaryListRes(Page<Summary> summaryList,Long userId) {
         List<MyPageResponseDTO.AllSummaryRes> allSummaryRes = summaryList.stream()
                 .map(MyPageConverter::toAllSummaryRes).collect(Collectors.toList());
         return MyPageResponseDTO.AllSummaryListRes.builder()
+                .userId(userId)
                 .allsummaryList(allSummaryRes)
                 .build();
     }
@@ -69,6 +71,7 @@ public class MyPageConverter {
             userImg = userFileOptional.get().getUrl();
         }
         return MyPageResponseDTO.DetailSummaryRes.builder()
+                .userId(user.getId())
                 .summaryId(summary.getId())
                 .identificationNum(summary.getIdentificationNum())
                 .uploadedAt(summary.getUpdateAt())
@@ -98,11 +101,12 @@ public class MyPageConverter {
                 .build();
     }
 
-    public static MyPageResponseDTO.AllReservationListRes toAllReservationListRes(Page<Reservation> reservationList) {
+    public static MyPageResponseDTO.AllReservationListRes toAllReservationListRes(Page<Reservation> reservationList,Long userId) {
 
         List<MyPageResponseDTO.AllReservationRes> allReservationRes = reservationList.stream()
                 .map(MyPageConverter::toAllReservationRes).collect(Collectors.toList());
         return MyPageResponseDTO.AllReservationListRes.builder()
+                .userId(userId)
                 .allReservationList(allReservationRes)
                 .build();
     }
