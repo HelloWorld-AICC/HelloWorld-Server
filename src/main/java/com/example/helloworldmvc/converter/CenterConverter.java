@@ -36,7 +36,6 @@ public class CenterConverter {
                 .status(currentStatus)
                 .closed(center.getClosed().toString())
                 .address(center.getAddress())
-                .image(center.getFile().getUrl())
                 .image(centerImg)
                 .latitude(center.getLatitude())
                 .longitude(center.getLongitude())
