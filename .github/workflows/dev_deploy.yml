@@ -44,6 +44,9 @@ jobs:
       - name: Copy script
         run: cp ./scripts/*.sh ./deploy
 
+      - name: Copy Nginx Config
+        run: cp .platform/nginx/nginx.conf ./deploy
+
       - name: Make zip file
         run: zip -r ./helloWorld.zip ./deploy
         shell: bash
