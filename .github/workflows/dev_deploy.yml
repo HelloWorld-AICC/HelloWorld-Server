@@ -63,9 +63,9 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }}
         run:
-          aws deploy create-deployment \
-          --application-name hello-world \
-          --deployment-group-name hello-world-group \
-          --file-exists-behavior OVERWRITE \
-          --s3-location bucket=ec2-cicd-bucket,bundleType=zip,key=helloWorld.zip \ 
+          aws deploy create-deployment 
+          --application-name hello-world 
+          --deployment-group-name hello-world-group 
+          --file-exists-behavior OVERWRITE 
+          --s3-location bucket=ec2-cicd-bucket,bundleType=zip,key=helloWorld.zip 
           --region ap-northeast-2
