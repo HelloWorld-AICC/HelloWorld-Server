@@ -1,23 +1,16 @@
-name: Solution-friend Dev CI/CD
+name: Hello-World Dev CI/CD
 
 on:
   pull_request:
     types: [ closed ]
   workflow_dispatch: # (2).수동 실행도 가능하도록
 env:
-  # Java
-  JAVA_VERSION: 8u171
-  #DockerHub
-  DOCKER_HUB_USERNAME: swlee1999
-  # AWS & Elastic Bean Stalk
-  AWS_REGION: ap-northeast-2
-  EB_ENVIRONMENT_NAME: Hello-world-dev-env
-  EB_APPLICATION_NAME: hello-world-dev
-  EB_DEPLOYMENT_PACKAGE: elasticbeanstalk/docker-compose.yml
+  S3_BUCKET_NAME: ec2-cicd-bucket
 jobs:
   build:
     runs-on: ubuntu-latest # (3).OS환경
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2 # (4).코드 check out
@@ -35,44 +28,44 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build -x test
         shell: bash # (7).build시작
+      # 디렉토리 생성
+      - name: Make Directory
+        run: mkdir -p deploy
 
-      - name: Get current time
-        uses: 1466587594/get-current-time@v2
-        id: current-time
+      # Jar 파일 복사
+      - name: Copy Jar
+        run: cp ./build/libs/*.jar ./deploy
+
+      # appspec.yml 파일 복사
+      - name: Copy appspec.yml
+        run: cp appspec.yml ./deploy
+
+      # script files 복사
+      - name: Copy script
+        run: cp ./scripts/*.sh ./deploy
+
+      - name: Make zip file
+        run: zip -r ./coinTalk.zip ./deploy
+        shell: bash
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          format: YYYY-MM-DDTHH-mm-ss
-          utcOffset: "+09:00" # (8).build시점의 시간확보
+          aws-access-key-id: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY}}
+          aws-region: ap-northeast-2
 
-      - name: Show Current Time
-        run: echo "CurrentTime=$"
-        shell: bash # (9).확보한 시간 보여주기
-
-      - name: Generate deployment package
-        run: |
-          mkdir -p deploy
-          cp build/libs/*.jar deploy/application.jar
-          cp Procfile deploy/Procfile
-          cp -r .ebextensions-dev deploy/.ebextensions
-          cp -r .platform deploy/.platform
-          cd deploy && zip -r deploy.zip .
-
-      - name: Docker Login
-        uses: docker/login-action@f3364599c6aa293cdc2b8391b1b56d0c30e45c8a
-        with:
-          username: ${{env.DOCKER_HUB_USERNAME}}
-          password: ${{secrets.DOCKER_HUB_PASSWORD}}
-
-      - name: Push to Dockerhub
-        run: ./gradlew jib
-
-      - name: Beanstalk Deploy
-        uses: einaregilsson/beanstalk-deploy@v20
-        with:
-          aws_access_key: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }}
-          application_name: ${{env.EB_APPLICATION_NAME}}
-          environment_name: ${{env.EB_ENVIRONMENT_NAME}}
-          version_label: github-action-${{ steps.current-time.outputs.formattedTime }}
-          region: ap-northeast-2
-          deployment_package: ${{ env.EB_DEPLOYMENT_PACKAGE }}
-          wait_for_deployment: false
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./helloWorld.zip s3://$S3_BUCKET_NAME/
+      # Deploy
+      - name: Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }}
+        run:
+          aws deploy create-deployment \
+          --application-name coinTalk[만든 애플리케이션 이름] \
+          --deployment-group-name coinTalk-group[만든 애플리케이션 그룹 이름] \
+          --file-exists-behavior OVERWRITE \
+          --s3-location bucket=cointalk-deploy[S3버킷이름],bundleType=zip,key=coinTalk.zip[S3버킷 속 압축파일] \ 
+          --region ap-northeast-2
