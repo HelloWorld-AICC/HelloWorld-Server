@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,10 @@ public class Center {
     private CenterStatus status;
 
     @Column(nullable = true)
-    private LocalDateTime deadLine;
+    private LocalTime closed;
+
+    @Column(nullable = true)
+    private LocalTime opened;
 
     @Column(nullable = false, length = 100)
     private String address;
