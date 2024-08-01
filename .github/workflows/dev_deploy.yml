@@ -74,5 +74,5 @@ jobs:
           environment_name: ${{env.EB_ENVIRONMENT_NAME}}
           version_label: github-action-${{ steps.current-time.outputs.formattedTime }}
           region: ap-northeast-2
-          deployment_package: deploy/deploy.zip
-          wait_for_deployment: ${{ env.EB_DEPLOYMENT_PACKAGE }}
+          deployment_package: ${{ env.EB_DEPLOYMENT_PACKAGE }}
+          wait_for_deployment: false
