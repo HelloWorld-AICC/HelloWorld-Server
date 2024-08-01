@@ -1,7 +1,43 @@
-version: "3.8"
+version: '3.8'
 services:
-  backend:
+  spring-mvc-app:
     image: "swlee1999/deployment:latest"
     ports:
-      - "80:8080"
-    restart: "always"
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
+
+  spring-webflux-app:
+    image: "swlee1999/webflux"
+    ports:
+      - "8082:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
+
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: 5736kr
+      MYSQL_DATABASE: summary
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MY_PASSWORD}
+    ports:
+      - "3306:3306"
+
+  mongodb:
+    image: mongo:4.4
+    ports:
+      - "27017:27017"
+
+  redis:
+    image: redis:6
+    ports:
+      - "6379:6379"
