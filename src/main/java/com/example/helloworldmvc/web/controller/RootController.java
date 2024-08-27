@@ -10,4 +10,9 @@ public class RootController {
     public String health() {
         return "I'm Healthy!!!";
     }
+
+    @GetMapping("/test")
+    public String test(){
+        return "cicd is done";
+    }
 }
