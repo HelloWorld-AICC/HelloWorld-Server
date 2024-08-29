@@ -28,44 +28,41 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build -x test
         shell: bash # (7).build시작
+
+      - name: Set Version
+        id: set_current_date
+        run: echo "version=$(date '+%Y-%m-%d-%H-%M-%S')" >> $GITHUB_OUTPUT
+
       # 디렉토리 생성
       - name: Make Directory
         run: mkdir -p deploy
+      - name: Docker Image Build
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/helloworld-mvc:${{ steps.set_current_date.outputs.version }} .
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/helloworld-mvc:${{ steps.set_current_date.outputs.version }} ${{ secrets.DOCKERHUB_USERNAME }}/helloworld-mvc:latest
 
-      # Jar 파일 복사
-      - name: Copy Jar
-        run: cp ./build/libs/*.jar ./deploy
-
-      # appspec.yml 파일 복사
-      - name: Copy appspec.yml
-        run: cp appspec.yml ./deploy
-
-      # script files 복사
-      - name: Copy script
-        run: cp ./scripts/*.sh ./deploy
-
-      - name: Make zip file
-        run: zip -r ./helloWorld.zip ./deploy
-        shell: bash
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Docker Login
+        uses: docker/login-action@v3
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID}}
-          aws-secret-access-key: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY}}
-          aws-region: ap-northeast-2
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./helloWorld.zip s3://$S3_BUCKET_NAME/
-      # Deploy
-      - name: Deploy
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }}
-        run:
-          aws deploy create-deployment 
-          --application-name hello-world 
-          --deployment-group-name hello-world-group 
-          --file-exists-behavior OVERWRITE 
-          --s3-location bucket=ec2-cicd-bucket,bundleType=zip,key=helloWorld.zip 
-          --region ap-northeast-2
+      - name: Docker Hub Push
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/helloworld-mvc:${{ steps.set_current_date.outputs.version }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/helloworld-mvc:latest
+
+      #ssh 접속 후 docker-compose
+      - name: Deploy in EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd app
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/helloworld-mvc
+            docker-compose up -d
+            sudo docker logs -f helloworld-mvc &> helloworld-mvc.log &
+            docker image prune -f
