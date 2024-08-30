@@ -61,7 +61,7 @@ public class GoogleServiceImpl implements GoogleService {
                 .clientId(googleClientId)
                 .clientSecret(googleClientPassword)
                 .code(code)
-                .redirectUri("http://localhost:8080/api/v1/google/login")
+                .redirectUri(redirectUrl)
                 .grantType("authorization_code")
                 .build());
         GoogleDetailResponse googleProfile = googleClient.getGoogleDetailInfo(GoogleDetailRequest.builder()
