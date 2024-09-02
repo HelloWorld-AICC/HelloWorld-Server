@@ -9,9 +9,10 @@ import com.example.helloworldmvc.web.dto.UserResponseDTO;
 public class UserConverter {
 
     public static User toGoogleUser(GoogleDetailResponse googleProfile){
+        String name = (googleProfile.getName() != null ? googleProfile.getName() : "Google User"); // 기본 이름 설정
         return User.builder()
                 .email(googleProfile.getEmail())
-                .name(googleProfile.getName())
+                .name(name)
                 .role(Role.USER)
                 .build();
     }
