@@ -1,6 +1,7 @@
 package com.example.helloworldmvc.converter;
 
 import com.example.helloworldmvc.domain.User;
+import com.example.helloworldmvc.domain.enums.Role;
 import com.example.helloworldmvc.web.dto.GoogleDetailResponse;
 import com.example.helloworldmvc.web.dto.TokenDTO;
 import com.example.helloworldmvc.web.dto.UserResponseDTO;
@@ -11,6 +12,7 @@ public class UserConverter {
         return User.builder()
                 .email(googleProfile.getEmail())
                 .name(googleProfile.getName())
+                .role(Role.USER)
                 .build();
     }
     public static UserResponseDTO.OAuthResponse toOAuthResponse(TokenDTO accessToken, TokenDTO refreshToken, Boolean isLogin, User user) {
