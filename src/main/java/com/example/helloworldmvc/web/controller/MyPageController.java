@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/myPage")
+@RequestMapping("/mvc/myPage")
 public class MyPageController {
     private final MyPageService myPageService;
 
