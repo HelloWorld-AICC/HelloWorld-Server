@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,10 +59,11 @@ public class GoogleServiceImpl implements GoogleService {
     @Override
     @Transactional
     public List<TokenDTO> loginGoogle(String code) {
+        final String decodedCode = URLDecoder.decode(code, StandardCharsets.UTF_8);
         GoogleTokenResponse googleTokenResponse = googleClient.getGoogleToken(GoogleTokenRequest.builder()
                 .clientId(googleClientId)
                 .clientSecret(googleClientPassword)
-                .code(code)
+                .code(decodedCode)
                 .redirectUri(redirectUrl)
                 .grantType("authorization_code")
                 .build());
