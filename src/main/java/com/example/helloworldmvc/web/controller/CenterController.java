@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/center")
+@RequestMapping("/mvc/center")
 public class CenterController {
 
     private final CenterService centerService;
