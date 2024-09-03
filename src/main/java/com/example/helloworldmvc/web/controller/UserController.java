@@ -41,4 +41,13 @@ public class UserController {
     public ApiResponse<List<TokenDTO>> selectGoogleLoginInfo(@RequestParam(value = "code") String code){
         return ApiResponse.onSuccess(googleService.loginGoogle(code));
     }
+
+    @Operation(summary = "구글 로그인 인증코드 발급 API", description = "code 발급")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+    })
+    @GetMapping("/code")
+    public ApiResponse<String> grantGoogleLoginCode(@RequestParam(value = "code") String code){
+        return ApiResponse.onSuccess(code);
+    }
 }
