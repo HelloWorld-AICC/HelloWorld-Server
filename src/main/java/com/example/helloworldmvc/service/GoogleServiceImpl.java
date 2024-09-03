@@ -59,7 +59,7 @@ public class GoogleServiceImpl implements GoogleService {
     @Override
     @Transactional
     public List<TokenDTO> loginGoogle(String code) {
-        final String decodedCode = URLDecoder.decode(code, StandardCharsets.UTF_8);
+        String decodedCode = URLDecoder.decode(code, StandardCharsets.UTF_8);
         GoogleTokenResponse googleTokenResponse = googleClient.getGoogleToken(GoogleTokenRequest.builder()
                 .clientId(googleClientId)
                 .clientSecret(googleClientPassword)
