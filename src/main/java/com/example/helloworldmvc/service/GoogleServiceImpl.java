@@ -42,6 +42,7 @@ public class GoogleServiceImpl implements GoogleService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate redisTemplate;
+
     @Override
     public ApiResponse<String> getGoogleLoginView() {
         return ApiResponse.<String>builder()
@@ -65,13 +66,16 @@ public class GoogleServiceImpl implements GoogleService {
                 .clientSecret(googleClientPassword)
                 .code(decodedCode)
                 .redirectUri(redirectUrl)
+                .responseType("code")
+                .scope("email%20profile%20openid")
+                .accessType("offline")
                 .grantType("authorization_code")
                 .build());
         GoogleDetailResponse googleProfile = googleClient.getGoogleDetailInfo(GoogleDetailRequest.builder()
                 .id_token(googleTokenResponse.getId_token())
                 .build());
         Optional<User> optionalUser = userRepository.findByEmail(googleProfile.getEmail());
-        if(optionalUser.isPresent()) {
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             TokenDTO accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
             TokenDTO refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
@@ -81,7 +85,7 @@ public class GoogleServiceImpl implements GoogleService {
             tokenDTOList.add(accessToken);
 
             return tokenDTOList;
-        }  else {
+        } else {
             User user = userRepository.save(UserConverter.toGoogleUser(googleProfile));
             TokenDTO accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
             TokenDTO refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
