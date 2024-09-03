@@ -23,7 +23,7 @@ public class UserController {
     private final GoogleService googleService;
 
     // 구글 로그인 화면 이동
-    @GetMapping("/login-view")
+    @PostMapping("/login-view")
     @Operation(summary = "구글 로그인 화면 조회 API", description = "구글 간편 로그인 페이지로 이동")
     public ResponseEntity<ApiResponse<String>> getGoogleLoginView(){
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
