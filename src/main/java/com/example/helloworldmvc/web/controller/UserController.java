@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +49,9 @@ public class UserController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
     @GetMapping("/code")
-    public ApiResponse<String> grantGoogleLoginCode(@RequestParam(value = "code") String code){
+    public ApiResponse<String> grantGoogleLoginCode(@RequestParam(value = "code") String code,
+                                                    HttpServletResponse httpServletResponse){
+        httpServletResponse.addCookie(new Cookie("code", code));
         return ApiResponse.onSuccess(code);
     }
 }
