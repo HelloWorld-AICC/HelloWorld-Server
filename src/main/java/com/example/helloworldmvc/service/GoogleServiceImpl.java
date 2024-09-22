@@ -7,6 +7,11 @@ import com.example.helloworldmvc.converter.UserConverter;
 import com.example.helloworldmvc.domain.User;
 import com.example.helloworldmvc.repository.UserRepository;
 import com.example.helloworldmvc.web.dto.*;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +19,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.security.GeneralSecurityException;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -29,6 +34,9 @@ public class GoogleServiceImpl implements GoogleService {
     @Value("${google.client.id}")
     private String googleClientId;
 
+    @Value("${google.mobile.id}")
+    private String googleMobileClientId;
+
     @Value("${google.client.pw}")
     private String googleClientPassword;
 
@@ -38,10 +46,15 @@ public class GoogleServiceImpl implements GoogleService {
     @Value("${google.redirect.url}")
     private String redirectUrl;
 
+    private static final List<String> SCOPES = Arrays.asList(
+            "https://www.googleapis.com/auth/userinfo.email",
+            "https://www.googleapis.com/auth/userinfo.profile"
+    );
     private final GoogleClient googleClient;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate redisTemplate;
+
     @Override
     public ApiResponse<String> getGoogleLoginView() {
         return ApiResponse.<String>builder()
@@ -71,7 +84,7 @@ public class GoogleServiceImpl implements GoogleService {
                 .id_token(googleTokenResponse.getId_token())
                 .build());
         Optional<User> optionalUser = userRepository.findByEmail(googleProfile.getEmail());
-        if(optionalUser.isPresent()) {
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             TokenDTO accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
             TokenDTO refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
@@ -81,7 +94,7 @@ public class GoogleServiceImpl implements GoogleService {
             tokenDTOList.add(accessToken);
 
             return tokenDTOList;
-        }  else {
+        } else {
             User user = userRepository.save(UserConverter.toGoogleUser(googleProfile));
             TokenDTO accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
             TokenDTO refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
@@ -93,5 +106,73 @@ public class GoogleServiceImpl implements GoogleService {
 
             return tokenDTOList;
         }
+    }
+
+    @Override
+    public List<TokenDTO> loginGoogleMobile(String token) throws GeneralSecurityException, IOException {
+        // Step 1: id_token을 검증합니다.
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new JacksonFactory())
+                .setAudience(Collections.singletonList(googleMobileClientId))  // Client ID 설정
+                .build();
+        GoogleIdToken googleIdToken = verifier.verify(token);
+        if (googleIdToken == null) {
+            throw new GeneralSecurityException("Invalid token");
+        }
+        // Step 2: 토큰 검증 성공 시 사용자 정보를 추출합니다.
+        GoogleIdToken.Payload payload = googleIdToken.getPayload();
+        String email = payload.getEmail();
+
+        // Step 3: 사용자 정보를 통해 데이터베이스에서 사용자 조회
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+
+        // Step 4: 사용자가 이미 존재하는지 확인 후, 토큰 생성 및 반환
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            TokenDTO accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
+            TokenDTO refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
+
+            // Redis에 refresh token 저장
+            redisTemplate.opsForValue().set("RT:" + user.getEmail(), refreshToken.getToken(), refreshToken.getTokenExpriresTime().getTime(), TimeUnit.MILLISECONDS);
+
+            List<TokenDTO> tokenDTOList = new ArrayList<>();
+            tokenDTOList.add(refreshToken);
+            tokenDTOList.add(accessToken);
+
+            return tokenDTOList;
+        } else {
+            // Step 5: 새로운 사용자일 경우 회원가입 처리 후 토큰 발급
+            User user = userRepository.save(UserConverter.toGoogleUser(email));
+            TokenDTO accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
+            TokenDTO refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
+
+            // Redis에 refresh token 저장
+            redisTemplate.opsForValue().set("RT:" + user.getEmail(), refreshToken.getToken(), refreshToken.getTokenExpriresTime().getTime(), TimeUnit.MILLISECONDS);
+
+            List<TokenDTO> tokenDTOList = new ArrayList<>();
+            tokenDTOList.add(refreshToken);
+            tokenDTOList.add(accessToken);
+
+            return tokenDTOList;
+        }
+    }
+
+    @Override
+    public String getIdTokenFromGoogle(String code) throws IOException {
+        return getTokenResponseFromGoogle(code).getIdToken();
+    }
+
+    private com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse getTokenResponseFromGoogle(String code) throws IOException {
+        return buildGoogleAuthorizationCodeFlow()
+                .newTokenRequest(code)
+                .setRedirectUri(redirectUrl)
+                .execute();
+    }
+    private GoogleAuthorizationCodeFlow buildGoogleAuthorizationCodeFlow() {
+        return new GoogleAuthorizationCodeFlow.Builder(
+                new NetHttpTransport(), JacksonFactory.getDefaultInstance(),
+                googleClientId, googleClientPassword, SCOPES)
+                .setAccessType("offline")
+                .setApprovalPrompt("force")
+                .build();
     }
 }
