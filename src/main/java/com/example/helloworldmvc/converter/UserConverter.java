@@ -16,6 +16,13 @@ public class UserConverter {
                 .role(Role.USER)
                 .build();
     }
+    public static User toGoogleUser(String email){
+        return User.builder()
+                .email(email)
+                .name("Google User")
+                .role(Role.USER)
+                .build();
+    }
     public static UserResponseDTO.OAuthResponse toOAuthResponse(TokenDTO accessToken, TokenDTO refreshToken, Boolean isLogin, User user) {
         return UserResponseDTO.OAuthResponse.builder()
                 .refreshToken(refreshToken)

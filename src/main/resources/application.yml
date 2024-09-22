@@ -40,6 +40,8 @@ google:
   client:
     id: ${GOOGLE_ID}
     pw: ${GOOGLE_PWD}
+  mobile:
+    id: ${GOOGLE_MOBILE_ID}
 
 cloud:
   aws:
