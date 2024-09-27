@@ -34,16 +34,16 @@ public class UserController {
                 .body(googleService.getGoogleLoginView());
     }
 
-    @Operation(summary = "웹 구글 로그인 API", description = "웹 구글 로그인 및 회원 가입을 진행")
+    @Operation(summary = "구글 로그인 API", description = "웹 구글 로그인 및 회원 가입을 진행")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
     @Parameters({
-            @Parameter(name = "code", description = "query string(RequestParam) - accessToken 입력"),
+            @Parameter(name = "token", description = "query string(RequestParam) - accessToken 입력"),
     })
-    @GetMapping("/login-web")
-    public ApiResponse<List<TokenDTO>> webGoogleLoginInfo(@RequestParam(value = "code") String code) {
-        return ApiResponse.onSuccess(googleService.loginGoogle(code));
+    @GetMapping("/login")
+    public ApiResponse<List<TokenDTO>> webGoogleLoginInfo(@RequestParam(value = "token") String token) {
+        return ApiResponse.onSuccess(googleService.loginGoogle(token));
     }
 
     @Operation(summary = "구글 로그인 인증코드 발급 API", description = "code 발급")
