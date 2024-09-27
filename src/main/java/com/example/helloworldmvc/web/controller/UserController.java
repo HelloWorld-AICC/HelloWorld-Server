@@ -64,7 +64,7 @@ public class UserController {
     @Parameters({
             @Parameter(name = "token", description = "query string(RequestParam) - accessToken 입력"),
     })
-    @GetMapping("/login-mobile")
+    @PostMapping("/login-mobile")
     public ApiResponse<List<TokenDTO>> mobileGoogleLoginInfo(@RequestParam(value = "token") String token) throws GeneralSecurityException, IOException {
         return ApiResponse.onSuccess(googleService.loginGoogleMobile(token));
     }
