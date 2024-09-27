@@ -71,17 +71,17 @@ public class GoogleServiceImpl implements GoogleService {
 
     @Override
     @Transactional
-    public List<TokenDTO> loginGoogle(String code) {
-        String decodedCode = URLDecoder.decode(code, StandardCharsets.UTF_8);
-        GoogleTokenResponse googleTokenResponse = googleClient.getGoogleToken(GoogleTokenRequest.builder()
-                .clientId(googleMobileClientId)
+    public List<TokenDTO> loginGoogle(String token) {
+        String decodedToken = URLDecoder.decode(token, StandardCharsets.UTF_8);
+//        GoogleTokenResponse googleTokenResponse = googleClient.getGoogleToken(GoogleTokenRequest.builder()
+//                .clientId(googleMobileClientId)
 //                .clientSecret(googleClientPassword)
-                .code(decodedCode)
+//                .code(decodedCode)
 //                .redirectUri(redirectUrl)
-                .grantType("authorization_code")
-                .build());
+//                .grantType("authorization_code")
+//                .build());
         GoogleDetailResponse googleProfile = googleClient.getGoogleDetailInfo(GoogleDetailRequest.builder()
-                .id_token(googleTokenResponse.getId_token())
+                .id_token(decodedToken)
                 .build());
         Optional<User> optionalUser = userRepository.findByEmail(googleProfile.getEmail());
         if (optionalUser.isPresent()) {
