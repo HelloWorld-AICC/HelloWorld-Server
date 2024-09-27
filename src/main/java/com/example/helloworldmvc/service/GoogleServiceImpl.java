@@ -112,11 +112,14 @@ public class GoogleServiceImpl implements GoogleService {
     public List<TokenDTO> loginGoogleMobile(String token) throws GeneralSecurityException, IOException {
         // Step 1: id_token을 검증합니다.
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new JacksonFactory())
-                .setAudience(Collections.singletonList(googleClientId))  // Client ID 설정
+                .setAudience(Collections.singletonList(googleMobileClientId))  // Client ID 설정
                 .build();
-        GoogleIdToken googleIdToken = verifier.verify(token);
-        if (googleIdToken == null) {
-            throw new GeneralSecurityException("Invalid token");
+        GoogleIdToken googleIdToken;
+        try {
+            googleIdToken = verifier.verify(token);
+        } catch (GeneralSecurityException | IOException e) {
+            log.info("[ERROR] : ", e);
+            throw new IllegalArgumentException("Wrong In verify IdToken", e);
         }
         // Step 2: 토큰 검증 성공 시 사용자 정보를 추출합니다.
         GoogleIdToken.Payload payload = googleIdToken.getPayload();
