@@ -74,8 +74,8 @@ public class GoogleServiceImpl implements GoogleService {
     public List<TokenDTO> loginGoogle(String code) {
         String decodedCode = URLDecoder.decode(code, StandardCharsets.UTF_8);
         GoogleTokenResponse googleTokenResponse = googleClient.getGoogleToken(GoogleTokenRequest.builder()
-                .clientId(googleClientId)
-                .clientSecret(googleClientPassword)
+                .clientId(googleMobileClientId)
+//                .clientSecret(googleClientPassword)
                 .code(decodedCode)
                 .redirectUri(redirectUrl)
                 .grantType("authorization_code")
