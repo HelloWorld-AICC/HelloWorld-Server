@@ -77,7 +77,7 @@ public class GoogleServiceImpl implements GoogleService {
                 .clientId(googleMobileClientId)
 //                .clientSecret(googleClientPassword)
                 .code(decodedCode)
-                .redirectUri(redirectUrl)
+//                .redirectUri(redirectUrl)
                 .grantType("authorization_code")
                 .build());
         GoogleDetailResponse googleProfile = googleClient.getGoogleDetailInfo(GoogleDetailRequest.builder()
