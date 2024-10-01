@@ -71,7 +71,7 @@ public class GoogleServiceImpl implements GoogleService {
 
     @Override
     @Transactional
-    public List<TokenDTO> loginGoogle(String token) {
+    public TokenListDTO loginGoogle(String token) {
         String decodedToken = URLDecoder.decode(token, StandardCharsets.UTF_8);
 //        GoogleTokenResponse googleTokenResponse = googleClient.getGoogleToken(GoogleTokenRequest.builder()
 //                .clientId(googleMobileClientId)
@@ -93,7 +93,7 @@ public class GoogleServiceImpl implements GoogleService {
             tokenDTOList.add(refreshToken);
             tokenDTOList.add(accessToken);
 
-            return tokenDTOList;
+            return UserConverter.toTokenList(tokenDTOList);
         } else {
             User user = userRepository.save(UserConverter.toGoogleUser(googleProfile));
             TokenDTO accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
@@ -104,7 +104,7 @@ public class GoogleServiceImpl implements GoogleService {
             tokenDTOList.add(refreshToken);
             tokenDTOList.add(accessToken);
 
-            return tokenDTOList;
+            return UserConverter.toTokenList(tokenDTOList);
         }
     }
 

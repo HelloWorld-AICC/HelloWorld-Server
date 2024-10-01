@@ -4,7 +4,10 @@ import com.example.helloworldmvc.domain.User;
 import com.example.helloworldmvc.domain.enums.Role;
 import com.example.helloworldmvc.web.dto.GoogleDetailResponse;
 import com.example.helloworldmvc.web.dto.TokenDTO;
+import com.example.helloworldmvc.web.dto.TokenListDTO;
 import com.example.helloworldmvc.web.dto.UserResponseDTO;
+
+import java.util.List;
 
 public class UserConverter {
 
@@ -29,6 +32,12 @@ public class UserConverter {
                 .accessToken(accessToken)
                 .isLogin(isLogin)
                 .email(user.getEmail())
+                .build();
+    }
+
+    public static TokenListDTO toTokenList(List<TokenDTO> tokens){
+        return TokenListDTO.builder()
+                .tokenList(tokens)
                 .build();
     }
 }
