@@ -18,7 +18,7 @@ public class CenterResponseDTO {
     @AllArgsConstructor
     public static class CenterMapListRes {
         List<CenterResponseDTO.CenterMapRes> centerMapList;
-        Long userId;
+        String userId;
     }
 
     @Builder
@@ -44,7 +44,7 @@ public class CenterResponseDTO {
     public static class CounselorListRes {
         LocalDateTime today;
         List<CounselorRes> counselorList;
-        Long userId;
+        String userId;
     }
     @Builder
     @Getter
@@ -63,7 +63,7 @@ public class CenterResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class FilterRes {
-        Long userId;
+        String userId;
     }
     @Builder
     @Getter
@@ -71,6 +71,6 @@ public class CenterResponseDTO {
     @AllArgsConstructor
     public static class CenterDetailRes {
         String detail;
-        Long userId;
+        String userId;
     }
 }

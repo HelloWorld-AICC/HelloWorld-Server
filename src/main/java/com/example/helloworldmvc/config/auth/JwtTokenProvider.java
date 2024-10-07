@@ -86,12 +86,12 @@ public class JwtTokenProvider {
 
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getTokenSub(token));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getGoogleEmail(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     // 토큰에서 회원정보 추출 - email (payload의 subject)
-    public String getTokenSub(String token) {
+    public String getGoogleEmail(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 

@@ -8,6 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SummaryRepository extends JpaRepository<Summary, Long> {
-    Page<Summary> findAllByUserId(Long userId, Pageable pageable);
+    Page<Summary> findAllByUserEmail(String userEmail, Pageable pageable);
 
 }

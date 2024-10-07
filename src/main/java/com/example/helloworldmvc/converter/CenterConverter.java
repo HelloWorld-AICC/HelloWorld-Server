@@ -43,7 +43,7 @@ public class CenterConverter {
                 .build();
     }
 
-    public static CenterResponseDTO.CenterMapListRes toCenterMapListRes(Page<Center> centerList,Long userId) {
+    public static CenterResponseDTO.CenterMapListRes toCenterMapListRes(Page<Center> centerList,String userId) {
         List<CenterResponseDTO.CenterMapRes> centerMapRes = centerList.stream()
                 .map(CenterConverter::toCenterMapRes).collect(Collectors.toList());
         return CenterResponseDTO.CenterMapListRes.builder()
@@ -52,7 +52,7 @@ public class CenterConverter {
                 .build();
     }
 
-    public static CenterResponseDTO.CounselorListRes toCounselorListRes(Page<Counselor> counselorList,Long userId) {
+    public static CenterResponseDTO.CounselorListRes toCounselorListRes(Page<Counselor> counselorList,String userId) {
         List<CenterResponseDTO.CounselorRes> counselorResList = counselorList.stream()
                 .map(CenterConverter::toCounselorRes).collect(Collectors.toList());
         return CenterResponseDTO.CounselorListRes.builder()
@@ -73,11 +73,11 @@ public class CenterConverter {
 
     public static CenterResponseDTO.FilterRes toFilterRes(User user) {
         return CenterResponseDTO.FilterRes.builder()
-                .userId(user.getId())
+                .userId(user.getEmail())
                 .build();
     }
 
-    public static CenterResponseDTO.CenterDetailRes toCenterDetailRes(Center center,Long userId) {
+    public static CenterResponseDTO.CenterDetailRes toCenterDetailRes(Center center,String userId) {
         return CenterResponseDTO.CenterDetailRes.builder()
                 .detail(center.getDetails())
                 .userId(userId)

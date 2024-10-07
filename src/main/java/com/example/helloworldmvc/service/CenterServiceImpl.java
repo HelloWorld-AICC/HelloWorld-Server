@@ -37,8 +37,8 @@ public class CenterServiceImpl implements CenterService {
 
 
     @Override
-    public Page<Counselor> getCounselorList(Long userId, Long centerId, Integer page, Integer size) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+    public Page<Counselor> getCounselorList(String userId, Long centerId, Integer page, Integer size) {
+        User user = userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         centerRepository.findById(centerId).orElseThrow(() -> new GeneralException(ErrorStatus.CENTER_NOT_FOUND));
         List<Long> languageId = user.getUserLanguageList().stream()
                 .map(language -> language.getLanguage().getId()).collect(Collectors.toList());
@@ -47,8 +47,8 @@ public class CenterServiceImpl implements CenterService {
     }
 
     @Override
-    public User createUserLanguage(Long userId, Long centerId, CenterRequestDTO.FilterLanguageReq request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+    public User createUserLanguage(String userId, Long centerId, CenterRequestDTO.FilterLanguageReq request) {
+        User user = userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         List<Language> languageList = request.getLanguageList().stream()
                 .map(language -> {
                     return languageRepository.findById(language).orElseThrow(() -> new GeneralException(ErrorStatus.LANGUAGE_NOT_FOUND));
@@ -60,8 +60,8 @@ public class CenterServiceImpl implements CenterService {
     }
 
     @Override
-    public Center getCenter(Long userId, Long centerId) {
-        userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+    public Center getCenter(String userId, Long centerId) {
+        userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         return centerRepository.findById(centerId).orElseThrow(() -> new GeneralException(ErrorStatus.CENTER_NOT_FOUND));
     }
 }

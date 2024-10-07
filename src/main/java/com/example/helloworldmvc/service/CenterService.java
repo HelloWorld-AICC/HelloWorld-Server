@@ -10,11 +10,11 @@ import org.springframework.data.domain.Page;
 public interface CenterService {
 //    Page<Center> getCenterList(Long userId, Integer page, Integer size);
 
-    Page<Counselor> getCounselorList(Long userId, Long centerid, Integer page, Integer size);
+    Page<Counselor> getCounselorList(String userId, Long centerId, Integer page, Integer size);
 
-    User createUserLanguage(Long userId, Long centerId, CenterRequestDTO.FilterLanguageReq request);
+    User createUserLanguage(String userId, Long centerId, CenterRequestDTO.FilterLanguageReq request);
 
-    Center getCenter(Long userId, Long centerId);
+    Center getCenter(String userId, Long centerId);
 
     Page<Center> getCenterListByDistance(double latitude, double longitude, Integer page, Integer size);
 }

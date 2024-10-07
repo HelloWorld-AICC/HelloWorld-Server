@@ -32,8 +32,8 @@ public class MyPageServiceImpl implements MyPageService{
 
 
     @Override
-    public User getUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+    public User getUser(String userId) {
+        return userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
     }
 
     @Override
@@ -42,9 +42,9 @@ public class MyPageServiceImpl implements MyPageService{
     }
 
     @Override
-    public Page<Summary> getSummaryList(Long userId, Integer page, Integer size) {
-        userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
-        return summaryRepository.findAllByUserId(userId, PageRequest.of(page, size));
+    public Page<Summary> getSummaryList(String userId, Integer page, Integer size) {
+        userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        return summaryRepository.findAllByUserEmail(userId, PageRequest.of(page, size));
     }
 
     @Override
@@ -54,8 +54,8 @@ public class MyPageServiceImpl implements MyPageService{
     }
 
     @Override
-    public void setUserProfile(Long userId, MultipartFile file){
-        User user=userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+    public void setUserProfile(String gmail, MultipartFile file){
+        User user=userRepository.findByEmail(gmail).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
 //        Long userId = jwtTokenProvider.getCurrentUser(request);
 //
@@ -65,7 +65,8 @@ public class MyPageServiceImpl implements MyPageService{
 //        }
 //        User user = optionalUser.get();
 
-        Optional<File> optionalFile=fileRepository.findByUserId(userId);
+
+        Optional<File> optionalFile=fileRepository.findByUserId(user.getId());
         File newFile=null;
         if(optionalFile.isPresent()){
             newFile=s3Service.changeImage(file,user);
