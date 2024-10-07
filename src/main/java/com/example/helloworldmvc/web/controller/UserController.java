@@ -2,15 +2,18 @@ package com.example.helloworldmvc.web.controller;
 
 import com.example.helloworldmvc.apiPayload.ApiResponse;
 import com.example.helloworldmvc.service.GoogleService;
+import com.example.helloworldmvc.service.UserService;
 import com.example.helloworldmvc.web.dto.GoogleDetailResponse;
 import com.example.helloworldmvc.web.dto.TokenDTO;
 import com.example.helloworldmvc.web.dto.TokenListDTO;
+import com.example.helloworldmvc.web.dto.UserRequestDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
+    private final UserService userService;
     private final GoogleService googleService;
 
     // 구글 로그인 화면 이동
@@ -43,7 +47,7 @@ public class UserController {
             @Parameter(name = "token", description = "query string(RequestParam) - accessToken 입력"),
     })
     @GetMapping("/login")
-    public ApiResponse<TokenListDTO> webGoogleLoginInfo(@RequestParam(value = "token") String token) {
+    public ApiResponse<TokenListDTO> googleLoginInfo(@RequestParam(value = "token") String token) {
         return ApiResponse.onSuccess(googleService.loginGoogle(token));
     }
 
@@ -56,6 +60,16 @@ public class UserController {
                                                     HttpServletResponse httpServletResponse) {
         httpServletResponse.addCookie(new Cookie("code", code));
         return ApiResponse.onSuccess(code);
+    }
+    @Operation(summary = "이메일 로그인 API", description = "이메일을 사용한 회원 가입한 사용자 로그인 진행")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+    })
+    @Parameters({
+    })
+    @GetMapping("/login-email")
+    public ApiResponse<TokenListDTO> loginGoogleEmail(@RequestBody @Valid UserRequestDTO.GoogleEmailRequest googleEmailRequest) {
+        return ApiResponse.onSuccess(userService.loginGmail(googleEmailRequest));
     }
 
 //    @Operation(summary = "모바일 구글 로그인 API", description = "구글 로그인 및 회원 가입을 진행")
