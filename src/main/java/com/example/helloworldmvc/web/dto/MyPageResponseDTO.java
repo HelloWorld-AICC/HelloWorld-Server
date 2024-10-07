@@ -29,7 +29,7 @@ public class MyPageResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AllSummaryListRes {
-        Long userId;
+        String userId;
         List<MyPageResponseDTO.AllSummaryRes> allsummaryList;
     }
     @Builder
@@ -50,7 +50,7 @@ public class MyPageResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class DetailSummaryRes{
-        Long userId;
+        String userId;
         Long summaryId;
         String identificationNum;
         LocalDateTime uploadedAt;

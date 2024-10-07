@@ -54,7 +54,7 @@ public class MyPageConverter {
                 .build();
     }
 
-    public static MyPageResponseDTO.AllSummaryListRes toAllSummaryListRes(Page<Summary> summaryList,Long userId) {
+    public static MyPageResponseDTO.AllSummaryListRes toAllSummaryListRes(Page<Summary> summaryList,String userId) {
         List<MyPageResponseDTO.AllSummaryRes> allSummaryRes = summaryList.stream()
                 .map(MyPageConverter::toAllSummaryRes).collect(Collectors.toList());
         return MyPageResponseDTO.AllSummaryListRes.builder()
@@ -71,7 +71,7 @@ public class MyPageConverter {
             userImg = userFileOptional.get().getUrl();
         }
         return MyPageResponseDTO.DetailSummaryRes.builder()
-                .userId(user.getId())
+                .userId(user.getEmail())
                 .summaryId(summary.getId())
                 .identificationNum(summary.getIdentificationNum())
                 .uploadedAt(summary.getUpdateAt())
