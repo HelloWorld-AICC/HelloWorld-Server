@@ -67,7 +67,7 @@ public class UserController {
     })
     @Parameters({
     })
-    @GetMapping("/login-email")
+    @PostMapping("/login-email")
     public ApiResponse<TokenListDTO> loginGoogleEmail(@RequestBody @Valid UserRequestDTO.GoogleEmailRequest googleEmailRequest) {
         return ApiResponse.onSuccess(userService.loginGmail(googleEmailRequest));
     }
