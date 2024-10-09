@@ -16,15 +16,17 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.formLogin(AbstractHttpConfigurer::disable)
+        http
+                .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Swagger UI 경로 예외
+                .anyRequest().authenticated()) // 그 외의 모든 요청은 인증 필요
+                .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(
                         HeadersConfigurer.FrameOptionsConfig::disable))
                 .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("**/").permitAll()
-                        .anyRequest().permitAll());
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
 }
