@@ -22,7 +22,9 @@ public class WebSecurityConfig {
                 .headers(headers -> headers.frameOptions(
                         HeadersConfigurer.FrameOptionsConfig::disable))
                 .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth.requestMatchers("**/").permitAll()
+                        .anyRequest().permitAll());
         return http.build();
     }
 }
