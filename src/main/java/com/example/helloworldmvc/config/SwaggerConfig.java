@@ -1,5 +1,7 @@
 package com.example.helloworldmvc.config;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -18,7 +20,7 @@ public class SwaggerConfig {
                 .description("Hello World Server MVC API 명세서")
                 .version("1.0.0");
 
-        String jwtSchemeName = "JWT TOKEN";
+        String jwtSchemeName = "JWT Token";
 
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtSchemeName);
 
@@ -27,7 +29,8 @@ public class SwaggerConfig {
                         .name(jwtSchemeName)
                         .type(SecurityScheme.Type.HTTP)
                         .scheme("bearer")
-                        .bearerFormat("JWT"));
+                        .bearerFormat("JWT")
+                        .in(SecurityScheme.In.HEADER));
 
         return new OpenAPI()
                 .addServersItem(new Server().url("/mvc"))
