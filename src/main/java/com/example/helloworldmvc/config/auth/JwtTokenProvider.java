@@ -1,13 +1,11 @@
 package com.example.helloworldmvc.config.auth;
 
 import com.example.helloworldmvc.apiPayload.GeneralException;
+import com.example.helloworldmvc.apiPayload.code.status.ErrorStatus;
 import com.example.helloworldmvc.domain.User;
 import com.example.helloworldmvc.repository.UserRepository;
 import com.example.helloworldmvc.web.dto.TokenDTO;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +15,13 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
 
@@ -60,7 +60,7 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .claim("types", "atk")
                 //.claim("userIdx",user.get().getUserIdx())
-                //.claim("role", user.get().getRole())
+                .claim("role", user.get().getRole())
                 .compact();
         return new TokenDTO(String.valueOf(TokenType.ATK), token, expiresTime);
     }
@@ -84,14 +84,21 @@ public class JwtTokenProvider {
         return new TokenDTO(String.valueOf(TokenType.RTK), token, expiresTime);
     }
 
-    // JWT 토큰에서 인증 정보 조회
+    // 토큰에서 사용자 정보를 추출하고 CustomAuthenticationToken을 생성
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getGoogleEmail(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        if(token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        String gmail = getGoogleEmail(token);
+        String role = getRole(token);
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.startsWith("ROLE_") ? role : "ROLE_" + role);
+        return new CustomAuthenticationToken(gmail, null, role, Collections.singleton(authority));
     }
-
     // 토큰에서 회원정보 추출 - email (payload의 subject)
     public String getGoogleEmail(String token) {
+        if(token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
@@ -102,11 +109,10 @@ public class JwtTokenProvider {
 
     // 토큰 재발급 때 Header에 rtk를 넣어 요청, 나머지 경우 atk 사용
     public String resolveToken(HttpServletRequest request) {
-        if (request.getHeader("rtk") != null) {
-            return request.getHeader("rtk");
-        } else {
-            return request.getHeader("atk");
+        if (request.getHeader("Authorization") != null) {
+            return request.getHeader("Authorization").substring(7);
         }
+        return null;
     }
 
     // 토큰의 유효성 + 만료일자 확인
@@ -149,5 +155,21 @@ public class JwtTokenProvider {
                 .get("id")));
 
         return userIdx;
+    }
+    // 토큰에서 role 추출
+    public String getRole(String token) {
+
+        try {
+            return Jwts.parser().setSigningKey(secretKey)
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .get("role", String.class);
+        } catch (MalformedJwtException e) {
+            throw new GeneralException(ErrorStatus.MALFORMED_JWT);
+        } catch (ExpiredJwtException e) {
+            throw new GeneralException(ErrorStatus.EXPIRED_ACCESS_TOKEN);
+        } catch (Exception e) {
+            throw new GeneralException(ErrorStatus.INVALID_ACCESS_TOKEN);
+        }
     }
 }

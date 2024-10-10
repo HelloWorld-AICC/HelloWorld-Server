@@ -12,12 +12,14 @@ import com.example.helloworldmvc.service.CenterService;
 import com.example.helloworldmvc.service.MyPageService;
 import com.example.helloworldmvc.web.dto.CenterRequestDTO;
 import com.example.helloworldmvc.web.dto.CenterResponseDTO;
+import com.example.helloworldmvc.web.dto.MyPageResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@SecurityRequirement(name = "JWT Token")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/myPage")
@@ -41,7 +44,7 @@ public class MyPageController {
     @Parameters({
             @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
     })
-    public ApiResponse<?> getMyPage(@RequestHeader("Authorization") String accessToken) {
+    public ApiResponse<MyPageResponseDTO.MyPageResDTO> getMyPage(@RequestHeader("Authorization") String accessToken) {
         String userId = jwtTokenProvider.getGoogleEmail(accessToken);
         User user = myPageService.getUser(userId);
         return ApiResponse.onSuccess(MyPageConverter.toMyPageRes(user));

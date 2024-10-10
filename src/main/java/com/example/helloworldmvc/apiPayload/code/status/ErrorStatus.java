@@ -29,7 +29,12 @@ ErrorStatus implements BaseErrorCode {
     // 요약문 관련 응답
     SUMMARY_NOT_FOUND(HttpStatus.NOT_FOUND, "SUMMARY4001", "요약본을 찾을수 없습니다."),
 
-
+    // JWT 토큰 관련 응답
+    INVALID_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "TOKEN4001","유효하지 않은 Access 토큰입니다."),
+    EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "TOKEN4002","만료된 Access 토큰입니다."),
+    EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "TOKEN4003","만료된 Refresh 토큰입니다."),
+    MALFORMED_JWT(HttpStatus.BAD_REQUEST, "TOKEN4004","잘못된 JWT 토큰입니다."),
+    SIGNATURE_INVALID(HttpStatus.UNAUTHORIZED, "TOKEN4005","유효하지 않은 JWT 서명입니다."),
     // 센터 관련 응답
     CENTER_NOT_FOUND(HttpStatus.NOT_FOUND,"CENTER4001", "센터를 찾을수 없습니다."),
     LANGUAGE_NOT_MATCHING(HttpStatus.NOT_FOUND, "CENTER4003", "해당 언어의 상담사가 없습니다.");
