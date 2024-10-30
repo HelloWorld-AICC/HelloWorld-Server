@@ -25,7 +25,7 @@ public class Community extends BaseEntity {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'EMPTY'")
+    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'ETC'")
     private CommunityCategory communityCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
