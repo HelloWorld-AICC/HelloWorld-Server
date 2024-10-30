@@ -23,6 +23,9 @@ public class File {
     @JoinColumn(name = "center_id")
     private Center center;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Community community;
+
     public void setUrl(String imageUrl){
         this.url = imageUrl;
     }
