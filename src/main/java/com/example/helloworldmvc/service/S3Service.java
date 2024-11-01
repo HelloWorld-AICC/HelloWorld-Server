@@ -2,6 +2,7 @@ package com.example.helloworldmvc.service;
 
 import com.example.helloworldmvc.apiPayload.aws.s3.AmazonS3Manager;
 import com.example.helloworldmvc.converter.FileConverter;
+import com.example.helloworldmvc.domain.Community;
 import com.example.helloworldmvc.domain.File;
 import com.example.helloworldmvc.domain.User;
 import com.example.helloworldmvc.domain.Uuid;
@@ -34,6 +35,13 @@ public class S3Service {
         newFile = fileRepository.findByUserId(user.getId()).get();
         newFile.setUrl(pictureUrl);
         return newFile;
+    }
+
+    public File setCommunityImage(MultipartFile file, Community community) {
+        String url = s3Manager.uploadFile(s3Manager.generateUserKeyName(createFileName()), file);
+        File file1 = FileConverter.toFile(url, null, null);
+        file1.setCommunity(community);
+        return fileRepository.save(file1);
     }
     public Uuid createFileName() {
         String uuid = UUID.randomUUID().toString();

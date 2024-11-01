@@ -1,6 +1,7 @@
 package com.example.helloworldmvc.converter;
 
 import com.example.helloworldmvc.domain.Center;
+import com.example.helloworldmvc.domain.Community;
 import com.example.helloworldmvc.domain.File;
 import com.example.helloworldmvc.domain.User;
 
