@@ -24,10 +24,19 @@ public class File {
     private Center center;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "community_id")
     private Community community;
 
     public void setUrl(String imageUrl){
         this.url = imageUrl;
+    }
+
+    public void setCommunity(Community community){
+        if(this.community != null){
+            community.getFileList().remove(this);
+        }
+        this.community = community;
+        community.getFileList().add(this);
     }
 
 }

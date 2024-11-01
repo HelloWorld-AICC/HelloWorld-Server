@@ -29,9 +29,18 @@ public class Community extends BaseEntity {
     private CommunityCategory communityCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
     private List<File> fileList = new ArrayList<>();
+
+    public void setUser(User user) {
+        if(this.user != null){
+            user.getCommunityList().remove(this);
+        }
+        this.user = user;
+        user.getCommunityList().add(this);
+    }
 
 }
