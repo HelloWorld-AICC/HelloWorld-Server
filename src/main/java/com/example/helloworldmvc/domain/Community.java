@@ -25,7 +25,7 @@ public class Community extends BaseEntity {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'ETC'")
+    @Column(columnDefinition = "VARCHAR(20) DEFAULT 'ETC'")
     private CommunityCategory communityCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,6 +34,9 @@ public class Community extends BaseEntity {
 
     @OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
     private List<File> fileList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
+    private List<Comment> commentList = new ArrayList<>();
 
     public void setUser(User user) {
         if(this.user != null){
