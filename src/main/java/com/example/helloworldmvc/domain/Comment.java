@@ -16,6 +16,8 @@ public class Comment extends BaseEntity {
 
     @Column(nullable = false)
     private String content;
+    @Column(nullable = false)
+    private Long anonymous;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
