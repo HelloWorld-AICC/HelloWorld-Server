@@ -1,5 +1,6 @@
 package com.example.helloworldmvc.converter;
 
+import com.example.helloworldmvc.domain.Comment;
 import com.example.helloworldmvc.domain.Community;
 import com.example.helloworldmvc.domain.enums.CommunityCategory;
 import com.example.helloworldmvc.web.dto.CommunityRequestDTO;
@@ -39,10 +40,35 @@ public class CommunityConverter {
             imageUrl = community.getFileList().get(0).getUrl();
         }
         return CommunityResponseDTO.PostDTO.builder()
+                .post_id(community.getId())
                 .title(community.getTitle())
                 .created_at(community.getCreatedAt())
                 .commentNum(community.getCommentList().size())
                 .imageUrl(imageUrl)
+                .build();
+    }
+
+    public static CommunityResponseDTO.PostDetailDTO toPostDetailDTO(Community community, Page<Comment> commentList){
+        List<String> list = new ArrayList<>();
+        if(!community.getFileList().isEmpty()){
+            community.getFileList().stream().map(file -> list.add(file.getUrl())).collect(Collectors.toList());
+        }
+        else list.add("NULL");
+        List<CommunityResponseDTO.CommentDTO> comments = commentList.stream().map(CommunityConverter::toCommentDTO).toList();
+        return CommunityResponseDTO.PostDetailDTO.builder()
+                .title(community.getTitle())
+                .content(community.getContent())
+                .created_at(community.getCreatedAt())
+                .fileList(list)
+                .commentDTOList(comments)
+                .build();
+    }
+
+    public static CommunityResponseDTO.CommentDTO toCommentDTO(Comment comment){
+        return CommunityResponseDTO.CommentDTO.builder()
+                .anonymousName(comment.getAnonymous())
+                .created_at(comment.getCreatedAt())
+                .content(comment.getContent())
                 .build();
     }
     public static CommunityCategory toCommunityCategory(Long categoryId){

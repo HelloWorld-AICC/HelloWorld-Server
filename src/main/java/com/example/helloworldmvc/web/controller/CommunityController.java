@@ -51,10 +51,33 @@ public class CommunityController {
             @Parameter(name = "size", description = "query string(RequestParam) - 몇 개씩 불러올지 개수를 세는 변수입니다. (1 이상 자연수로 설정)")
     })
     public ApiResponse<CommunityResponseDTO.PostListDTO> getCommunityList(@RequestHeader(name = "Authorization") String accessToken,
-                                           @PathVariable(name = "category_id") Long categoryId,
-                                           @RequestParam(name = "page") Integer page,
-                                           @RequestParam(name = "size") Integer size) {
+                                                                          @PathVariable(name = "category_id") Long categoryId,
+                                                                          @RequestParam(name = "page") Integer page,
+                                                                          @RequestParam(name = "size") Integer size) {
         String gmail = jwtTokenProvider.getGoogleEmail(accessToken);
         return ApiResponse.onSuccess(communityService.getCommunityList(gmail, categoryId, page, size));
+    }
+
+    @PostMapping(value = "/{category_id}/detail/{community_id}")
+    @Operation(summary = "커뮤니티 글 상세 조회 API", description = "커뮤니티 게시글을 상세 조회하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4001", description = "사용자를 찾을수 없습니다."),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMUNITY4001", description = "커뮤니티 글이 존재하지 않습니다."),
+    })
+    @Parameters({
+            @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
+            @Parameter(name = "category_id", description = "PathVariable - 게시글 카테고리 아이디"),
+            @Parameter(name = "community_id", description = "PathVariable - 게시글 아이디"),
+            @Parameter(name = "page", description = "query string(RequestParam) - 몇번째 페이지인지 가리키는 page 변수 입니다! (0부터 시작)"),
+            @Parameter(name = "size", description = "query string(RequestParam) - 몇 개씩 불러올지 개수를 세는 변수입니다. (1 이상 자연수로 설정)")
+    })
+    public ApiResponse<CommunityResponseDTO.PostDetailDTO> getCommunityDetail(@RequestHeader(name = "Authorization") String accessToken,
+                                                                           @PathVariable(name = "category_id") Long categoryId,
+                                                                           @PathVariable(name = "community_id") Long communityId,
+                                                                           @RequestParam(name = "page") Integer page,
+                                                                           @RequestParam(name = "size") Integer size) {
+        String gmail = jwtTokenProvider.getGoogleEmail(accessToken);
+        return ApiResponse.onSuccess(communityService.getCommunityDetail(gmail, communityId, page, size));
     }
 }

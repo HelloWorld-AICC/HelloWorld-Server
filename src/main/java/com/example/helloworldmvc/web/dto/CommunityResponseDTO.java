@@ -29,9 +29,32 @@ public class CommunityResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PostDTO{
+        Long post_id;
         String title;
         LocalDateTime created_at;
         Integer commentNum;
         String imageUrl;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PostDetailDTO{
+        String title;
+        String content;
+        LocalDateTime created_at;
+        List<String> fileList;
+        List<CommentDTO> commentDTOList;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommentDTO{
+        Long anonymousName;
+        LocalDateTime created_at;
+        String content;
     }
 }
