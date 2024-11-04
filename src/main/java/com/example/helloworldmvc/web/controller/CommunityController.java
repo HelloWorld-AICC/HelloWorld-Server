@@ -21,18 +21,40 @@ public class CommunityController {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final CommunityService communityService;
+
     @PostMapping(value = "/{category_id}/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "커뮤니티 글 작성 API", description = "커뮤니티 게시판에 글을 작성하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4001", description = "사용자를 찾을수 없습니다.")
+    })
+    @Parameters({
+            @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
+            @Parameter(name = "category_id", description = "PathVariable - 게시글 카테고리 아이디"),
+    })
+    public ApiResponse<CommunityResponseDTO.CreatedPostDTO> createCommunity(@RequestHeader(name = "Authorization") String accessToken,
+                                                                            @PathVariable(name = "category_id") Long categoryId,
+                                                                            @ModelAttribute @Valid CommunityRequestDTO.CreatePostDTO request) {
+        String gmail = jwtTokenProvider.getGoogleEmail(accessToken);
+        return ApiResponse.onSuccess(communityService.createCommunityPost(gmail, categoryId, request));
+    }
+
+    @GetMapping(value = "/{category_id}/create")
+    @Operation(summary = "커뮤니티 글 목록 조회 API", description = "해당 카테고리 게시글 목록을 조회하는 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
     @Parameters({
             @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
+            @Parameter(name = "category_id", description = "PathVariable - 게시글 카테고리 아이디"),
+            @Parameter(name = "page", description = "query string(RequestParam) - 몇번째 페이지인지 가리키는 page 변수 입니다! (0부터 시작)"),
+            @Parameter(name = "size", description = "query string(RequestParam) - 몇 개씩 불러올지 개수를 세는 변수입니다. (1 이상 자연수로 설정)")
     })
-    public ApiResponse<CommunityResponseDTO.CreatedPostDTO> createCommunity(@RequestHeader(name = "Authorization") String accessToken,
-                                                                            @PathVariable(name = "category_id") Long categoryId,
-                                                                            @ModelAttribute @Valid CommunityRequestDTO.CreatePostDTO request){
+    public ApiResponse<CommunityResponseDTO.PostListDTO> getCommunityList(@RequestHeader(name = "Authorization") String accessToken,
+                                           @PathVariable(name = "category_id") Long categoryId,
+                                           @RequestParam(name = "page") Integer page,
+                                           @RequestParam(name = "size") Integer size) {
         String gmail = jwtTokenProvider.getGoogleEmail(accessToken);
-        return ApiResponse.onSuccess(communityService.createCommunityPost(gmail, categoryId, request));
+        return ApiResponse.onSuccess(communityService.getCommunityList(gmail, categoryId, page, size));
     }
 }

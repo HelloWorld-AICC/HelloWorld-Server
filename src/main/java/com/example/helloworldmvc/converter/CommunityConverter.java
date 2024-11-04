@@ -4,8 +4,11 @@ import com.example.helloworldmvc.domain.Community;
 import com.example.helloworldmvc.domain.enums.CommunityCategory;
 import com.example.helloworldmvc.web.dto.CommunityRequestDTO;
 import com.example.helloworldmvc.web.dto.CommunityResponseDTO;
+import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommunityConverter {
     public static Community toCommunityPost(CommunityRequestDTO.CreatePostDTO createPostDTO, Long categoryId){
@@ -23,6 +26,25 @@ public class CommunityConverter {
                 .build();
     }
 
+    public static CommunityResponseDTO.PostListDTO toPostListDTO(Page<Community> postList){
+        List<CommunityResponseDTO.PostDTO> posts = postList.stream().map(CommunityConverter::toPostDTO).toList();
+        return CommunityResponseDTO.PostListDTO.builder()
+                .postDTOList(posts)
+                .build();
+    }
+
+    public static CommunityResponseDTO.PostDTO toPostDTO(Community community){
+        String imageUrl = "null";
+        if(!community.getFileList().isEmpty()){
+            imageUrl = community.getFileList().get(0).getUrl();
+        }
+        return CommunityResponseDTO.PostDTO.builder()
+                .title(community.getTitle())
+                .created_at(community.getCreatedAt())
+                .commentNum(community.getCommentList().size())
+                .imageUrl(imageUrl)
+                .build();
+    }
     public static CommunityCategory toCommunityCategory(Long categoryId){
         CommunityCategory communityCategory = null;
         switch (categoryId.intValue()){
