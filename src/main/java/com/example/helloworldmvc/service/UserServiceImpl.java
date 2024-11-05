@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import static com.example.helloworldmvc.apiPayload.code.status.ErrorStatus.USER_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -30,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public TokenListDTO loginGmail(UserRequestDTO.GoogleEmailRequest request) {
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new GeneralException(USER_NOT_FOUND));
 
         TokenDTO accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
         TokenDTO refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
@@ -41,5 +43,13 @@ public class UserServiceImpl implements UserService {
 
         return UserConverter.toTokenList(tokenDTOList);
 
+    }
+
+    @Override
+    public String deactivateUser(String userId) {
+        User user = userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(USER_NOT_FOUND));
+        user.setStatusTempDeactivated();
+        userRepository.save(user);
+        return  userId+" 유저가 삭제 되었습니다";
     }
 }

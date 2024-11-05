@@ -10,6 +10,7 @@ import com.example.helloworldmvc.domain.User;
 import com.example.helloworldmvc.domain.mapping.Reservation;
 import com.example.helloworldmvc.service.CenterService;
 import com.example.helloworldmvc.service.MyPageService;
+import com.example.helloworldmvc.service.UserService;
 import com.example.helloworldmvc.web.dto.CenterRequestDTO;
 import com.example.helloworldmvc.web.dto.CenterResponseDTO;
 import com.example.helloworldmvc.web.dto.MyPageResponseDTO;
@@ -34,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class MyPageController {
     private final MyPageService myPageService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
 
     @GetMapping("/")
     @Operation(summary = "마이페이지 API", description = "마이페이지 화면 API입니다.")
@@ -113,5 +115,19 @@ public class MyPageController {
         String userId = jwtTokenProvider.getGoogleEmail(accessToken);
         myPageService.setUserProfile(userId, file);
         return ApiResponse.onSuccess(userId);
+    }
+
+    @DeleteMapping("/delete")
+    @Operation(summary = "회원 탈퇴 API", description = "회원을 탈퇴시키는 API")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4001", description = "NOT_FOUND, 회원정보가 존재하지 않습니다."),
+    })
+    @Parameters({
+            @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
+    })
+    public ApiResponse<String> deactivateUser(@RequestHeader(name = "Authorization") String accessToken){
+        String userId = jwtTokenProvider.getGoogleEmail(accessToken);
+        return ApiResponse.onSuccess(userService.deactivateUser(userId));
     }
 }

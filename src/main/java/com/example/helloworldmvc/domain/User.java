@@ -2,12 +2,15 @@ package com.example.helloworldmvc.domain;
 
 import com.example.helloworldmvc.domain.common.BaseEntity;
 import com.example.helloworldmvc.domain.enums.Role;
+import com.example.helloworldmvc.domain.enums.UserStatus;
 import com.example.helloworldmvc.domain.mapping.UserLanguage;
 import com.example.helloworldmvc.domain.mapping.Reservation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +30,18 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 30)
     private String email;
 
+    @Column
+    private LocalDateTime deactivationDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status = UserStatus.ACTIVE;
+
     @Enumerated(EnumType.STRING) // Enum 타입은 문자열 형태로 저장해야 함
     @NotNull
     private Role role;
+
+
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -63,5 +75,20 @@ public class User extends BaseEntity {
         this.file = file;
     }
 
+    //특정 기간 이후 탈퇴 처리될 예정. 아직 사용x
+    public void activate() {
+        this.status = UserStatus.ACTIVE;
+        this.deactivationDate = null;
+    }
+
+    public void withdraw() {
+        this.status = UserStatus.WITHDRAWN;
+        this.deactivationDate = null;
+    }
+
+    public void setStatusTempDeactivated() {
+        this.status = UserStatus.TEMP_DEACTIVATED;
+        this.deactivationDate = LocalDateTime.now();
+    }
 }
 
