@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
+import static com.example.helloworldmvc.apiPayload.code.status.ErrorStatus.USER_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -74,5 +76,13 @@ public class MyPageServiceImpl implements MyPageService{
             newFile=s3Service.setImage(file,user);
         }
         user.setFile(newFile);
+    }
+
+    @Override
+    public String deactivateUser(String userId) {
+        User user = userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(USER_NOT_FOUND));
+        user.setStatusTempDeactivated();
+        userRepository.save(user);
+        return  userId+" 유저가 삭제 되었습니다";
     }
 }

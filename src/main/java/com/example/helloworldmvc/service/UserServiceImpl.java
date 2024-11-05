@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import static com.example.helloworldmvc.apiPayload.code.status.ErrorStatus.USER_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -42,4 +44,6 @@ public class UserServiceImpl implements UserService {
         return UserConverter.toTokenList(tokenDTOList);
 
     }
+
+
 }

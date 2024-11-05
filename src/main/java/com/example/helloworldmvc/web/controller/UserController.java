@@ -1,6 +1,7 @@
 package com.example.helloworldmvc.web.controller;
 
 import com.example.helloworldmvc.apiPayload.ApiResponse;
+import com.example.helloworldmvc.config.auth.JwtTokenProvider;
 import com.example.helloworldmvc.service.GoogleService;
 import com.example.helloworldmvc.service.UserService;
 import com.example.helloworldmvc.web.dto.GoogleDetailResponse;
@@ -30,6 +31,7 @@ public class UserController {
 
     private final UserService userService;
     private final GoogleService googleService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 구글 로그인 화면 이동
     @PostMapping("/login-view")
@@ -92,4 +94,5 @@ public class UserController {
 //        String token = googleService.getIdTokenFromGoogle(code);
 //        return ResponseEntity.ok(token);
 //    }
+
 }
