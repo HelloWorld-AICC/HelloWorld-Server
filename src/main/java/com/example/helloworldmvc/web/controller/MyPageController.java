@@ -128,6 +128,6 @@ public class MyPageController {
     })
     public ApiResponse<String> deactivateUser(@RequestHeader(name = "Authorization") String accessToken){
         String userId = jwtTokenProvider.getGoogleEmail(accessToken);
-        return ApiResponse.onSuccess(userService.deactivateUser(userId));
+        return ApiResponse.onSuccess(myPageService.deactivateUser(userId));
     }
 }

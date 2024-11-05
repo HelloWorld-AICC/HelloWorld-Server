@@ -14,4 +14,6 @@ public interface MyPageService {
     Page<Reservation> getReservationList(Long counselorId, Integer page, Integer size);
 
     void setUserProfile(String gmail, MultipartFile file);
+
+    String deactivateUser(String userId);
 }

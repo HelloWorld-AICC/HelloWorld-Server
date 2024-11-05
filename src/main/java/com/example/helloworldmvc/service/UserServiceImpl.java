@@ -45,11 +45,5 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public String deactivateUser(String userId) {
-        User user = userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(USER_NOT_FOUND));
-        user.setStatusTempDeactivated();
-        userRepository.save(user);
-        return  userId+" 유저가 삭제 되었습니다";
-    }
+
 }
