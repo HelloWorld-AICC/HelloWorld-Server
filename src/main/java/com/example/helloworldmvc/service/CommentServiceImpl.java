@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -29,11 +31,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentResponseDTO.commentCreateRes createComment(String userId, Long communityId, CommentRequestDTO.commentCreateReq requestBody) {
-        User user = userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
-        Community community = communityRepository.findById(communityId).orElseThrow(() -> new GeneralException(ErrorStatus.COMMUNITY_NOT_FOUND));
-        Long anonymousNumber = commentRepository.findByUserAndCommunity(user, community)
-                .map(Comment::getAnonymous)
-                .orElseGet(() -> commentRepository.findMaxAnonymousInCommunity(community) + 1);
+        User user = userRepository.findByEmail(userId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.COMMUNITY_NOT_FOUND));
+
+        List<Comment> existingComments = commentRepository.findByUserAndCommunity(user, community);
+        Long anonymousNumber = existingComments.isEmpty() ?
+                commentRepository.findMaxAnonymousInCommunity(community) + 1 :
+                existingComments.get(0).getAnonymous();
 
         Comment comment = CommentConverter.toComment(requestBody, community, user, anonymousNumber);
         Comment savedComment = commentRepository.save(comment);
