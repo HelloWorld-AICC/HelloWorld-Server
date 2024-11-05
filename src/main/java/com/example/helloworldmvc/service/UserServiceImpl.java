@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public TokenListDTO loginGmail(UserRequestDTO.GoogleEmailRequest request) {
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new GeneralException(USER_NOT_FOUND));
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         TokenDTO accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
         TokenDTO refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
