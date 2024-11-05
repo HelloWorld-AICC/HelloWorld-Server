@@ -2,7 +2,10 @@ package com.example.helloworldmvc.web.controller;
 
 import com.example.helloworldmvc.apiPayload.ApiResponse;
 import com.example.helloworldmvc.config.auth.JwtTokenProvider;
+import com.example.helloworldmvc.service.CommentService;
 import com.example.helloworldmvc.service.CommunityService;
+import com.example.helloworldmvc.web.dto.CommentRequestDTO;
+import com.example.helloworldmvc.web.dto.CommentResponseDTO;
 import com.example.helloworldmvc.web.dto.CommunityRequestDTO;
 import com.example.helloworldmvc.web.dto.CommunityResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +24,7 @@ public class CommunityController {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final CommunityService communityService;
+    private final CommentService commentService;
 
     @PostMapping(value = "/{category_id}/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "커뮤니티 글 작성 API", description = "커뮤니티 게시판에 글을 작성하는 API입니다.")
@@ -79,5 +83,25 @@ public class CommunityController {
                                                                            @RequestParam(name = "size") Integer size) {
         String gmail = jwtTokenProvider.getGoogleEmail(accessToken);
         return ApiResponse.onSuccess(communityService.getCommunityDetail(gmail, communityId, page, size));
+    }
+
+
+    @PostMapping(value = "/{community_id}/comment")
+    @Operation(summary = "커뮤니티 댓글 작성 API", description = "커뮤니티 게시판에 글을 작성하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4001", description = "사용자를 찾을수 없습니다.")
+    })
+    @Parameters({
+            @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
+    })
+    public ApiResponse<CommentResponseDTO.commentCreateRes> createComment(@RequestHeader(name = "Authorization") String accessToken,
+                                                                       @PathVariable(name = "community_id") Long communityId,
+                                                                       @RequestBody @Valid CommentRequestDTO.commentCreateReq requestBody) {
+        {
+        String gmail = jwtTokenProvider.getGoogleEmail(accessToken);
+        return ApiResponse.onSuccess(commentService.createComment(gmail, communityId, requestBody));
+    }
+
     }
 }
