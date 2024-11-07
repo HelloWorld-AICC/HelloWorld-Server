@@ -33,7 +33,7 @@ public class SwaggerConfig {
                         .in(SecurityScheme.In.HEADER));
 
         return new OpenAPI()
-                .addServersItem(new Server().url("/"))
+                .addServersItem(new Server().url("/mvc"))
                 .info(info)
                 .addSecurityItem(securityRequirement)
                 .components(components);
