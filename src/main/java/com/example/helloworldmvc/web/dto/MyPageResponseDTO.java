@@ -80,4 +80,12 @@ public class MyPageResponseDTO {
         String userImg;
         String title;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PatchProfileEmail{
+        String email;
+    }
 }
