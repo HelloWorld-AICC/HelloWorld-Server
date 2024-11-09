@@ -9,6 +9,7 @@ import com.example.helloworldmvc.domain.User;
 import com.example.helloworldmvc.domain.mapping.Reservation;
 import com.example.helloworldmvc.repository.UserRepository;
 import com.example.helloworldmvc.web.dto.CenterResponseDTO;
+import com.example.helloworldmvc.web.dto.MyPageRequestDTO;
 import com.example.helloworldmvc.web.dto.MyPageResponseDTO;
 import org.springframework.data.domain.Page;
 

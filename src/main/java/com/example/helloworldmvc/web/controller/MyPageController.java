@@ -13,6 +13,7 @@ import com.example.helloworldmvc.service.MyPageService;
 import com.example.helloworldmvc.service.UserService;
 import com.example.helloworldmvc.web.dto.CenterRequestDTO;
 import com.example.helloworldmvc.web.dto.CenterResponseDTO;
+import com.example.helloworldmvc.web.dto.MyPageRequestDTO;
 import com.example.helloworldmvc.web.dto.MyPageResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -101,20 +102,20 @@ public class MyPageController {
         return ApiResponse.onSuccess(MyPageConverter.toAllReservationListRes(reservationList, userId));
     }
 
-    @PostMapping(value = "/setProfile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/setProfile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "프로필 변경 API", description = "프로필 변경 API API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
-
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4001", description = "사용자를 찾을수 없습니다."),
     })
     @Parameters({
             @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
     })
-    public ApiResponse<String> createLanguageFilter(@RequestHeader("Authorization") String accessToken,
-                                                  @RequestParam("file") MultipartFile file) {
+    public ApiResponse<MyPageResponseDTO.PatchProfileEmail> createLanguageFilter(@RequestHeader("Authorization") String accessToken,
+                                                                                 @ModelAttribute @Valid MyPageRequestDTO.PatchProfile request) {
         String userId = jwtTokenProvider.getGoogleEmail(accessToken);
-        myPageService.setUserProfile(userId, file);
-        return ApiResponse.onSuccess(userId);
+        myPageService.setUserProfile(userId, request);
+        return ApiResponse.onSuccess(MyPageResponseDTO.PatchProfileEmail.builder().email(userId).build());
     }
 
     @DeleteMapping("/delete")
@@ -126,7 +127,7 @@ public class MyPageController {
     @Parameters({
             @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
     })
-    public ApiResponse<String> deactivateUser(@RequestHeader(name = "Authorization") String accessToken){
+    public ApiResponse<String> deactivateUser(@RequestHeader(name = "Authorization") String accessToken) {
         String userId = jwtTokenProvider.getGoogleEmail(accessToken);
         return ApiResponse.onSuccess(myPageService.deactivateUser(userId));
     }

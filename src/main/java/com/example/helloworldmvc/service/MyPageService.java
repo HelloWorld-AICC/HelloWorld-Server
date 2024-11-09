@@ -4,6 +4,7 @@ import com.example.helloworldmvc.domain.Center;
 import com.example.helloworldmvc.domain.Summary;
 import com.example.helloworldmvc.domain.User;
 import com.example.helloworldmvc.domain.mapping.Reservation;
+import com.example.helloworldmvc.web.dto.MyPageRequestDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +14,7 @@ public interface MyPageService {
     Page<Summary> getSummaryList(String userId, Integer page, Integer size);
     Page<Reservation> getReservationList(Long counselorId, Integer page, Integer size);
 
-    void setUserProfile(String gmail, MultipartFile file);
+    void setUserProfile(String gmail, MyPageRequestDTO.PatchProfile request);
 
     String deactivateUser(String userId);
 }

@@ -9,6 +9,7 @@ import com.example.helloworldmvc.domain.Summary;
 import com.example.helloworldmvc.domain.User;
 import com.example.helloworldmvc.domain.mapping.Reservation;
 import com.example.helloworldmvc.repository.*;
+import com.example.helloworldmvc.web.dto.MyPageRequestDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -56,9 +57,8 @@ public class MyPageServiceImpl implements MyPageService{
     }
 
     @Override
-    public void setUserProfile(String gmail, MultipartFile file){
+    public void setUserProfile(String gmail, MyPageRequestDTO.PatchProfile request){
         User user=userRepository.findByEmail(gmail).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
-
 //        Long userId = jwtTokenProvider.getCurrentUser(request);
 //
 //        Optional<User> optionalUser = userRepository.findById(userId);
@@ -69,13 +69,16 @@ public class MyPageServiceImpl implements MyPageService{
 
 
         Optional<File> optionalFile=fileRepository.findByUserId(user.getId());
-        File newFile=null;
-        if(optionalFile.isPresent()){
-            newFile=s3Service.changeImage(file,user);
-        }else{
-            newFile=s3Service.setImage(file,user);
+        File newFile = null;
+        if(optionalFile.isPresent() && request.getFile() != null){
+            newFile=s3Service.changeImage(request.getFile(), user);
+            user.setFile(newFile);
+        }else if(request.getFile() != null){
+            newFile=s3Service.setImage(request.getFile(), user);
+            user.setFile(newFile);
         }
-        user.setFile(newFile);
+        user.setName(request.getNickName());
+        userRepository.save(user);
     }
 
     @Override

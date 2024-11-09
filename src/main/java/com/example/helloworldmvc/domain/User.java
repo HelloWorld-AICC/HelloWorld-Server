@@ -71,6 +71,9 @@ public class User extends BaseEntity {
         return this.role.getKey();
     }
 
+    public void setName(String name){
+        this.name = name;
+    }
     public void setFile(File file) {
         this.file = file;
     }
