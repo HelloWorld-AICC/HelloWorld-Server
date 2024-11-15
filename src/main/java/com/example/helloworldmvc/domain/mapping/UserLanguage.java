@@ -29,4 +29,7 @@ public class UserLanguage {
         this.user = user;
         user.getUserLanguageList().add(this);
     }
+    public void setLanguage(Language language){
+        this.language = language;
+    }
 }
