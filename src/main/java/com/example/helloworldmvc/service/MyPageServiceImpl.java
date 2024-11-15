@@ -32,6 +32,7 @@ public class MyPageServiceImpl implements MyPageService{
     private final FileRepository fileRepository;
     private final S3Service s3Service;
     private final CommunityRepository communityRepository;
+    private final CommentRepository commentRepository;
 
 
 
@@ -95,10 +96,20 @@ public class MyPageServiceImpl implements MyPageService{
         User user = userRepository.findByEmail(userId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<Community> communityPage = communityRepository.findAllByUserId(user.getId(), pageRequest);
+        Page<Community> communityPage = communityRepository.findAllByUserId(user.getId(), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt")));
         Page<MyPageResponseDTO.MyCommunityResDTO> communityResPage = communityPage.map(MyPageConverter::toMyCommunityRes);
 
         return MyPageConverter.toAllMyCommunityListRes(communityResPage, user.getId());
+    }
+
+    @Override
+    public MyPageResponseDTO.MyCommentListResDTO getAllCommentsByUser(String userId, Integer page, Integer size) {
+        User user = userRepository.findByEmail(userId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+
+        Page<Comment> commentPage = commentRepository.findAllByUserId(user.getId(), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt")));
+        Page<MyPageResponseDTO.MyCommentResDTO> commentResPage = commentPage.map(MyPageConverter::toMyCommentRes);
+
+        return MyPageConverter.toMyCommentListRes(commentResPage, user.getId());
     }
 }
