@@ -131,4 +131,22 @@ public class MyPageController {
         String userId = jwtTokenProvider.getGoogleEmail(accessToken);
         return ApiResponse.onSuccess(myPageService.deactivateUser(userId));
     }
+
+    @GetMapping("/AllMyCommunity")
+    @Operation(summary = "내가 작성한 전체 글 조회 API", description = "내가 작성한 전체 글 조회 API 화면 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4001", description = "사용자를 찾을수 없습니다.")
+    })
+    @Parameters({
+            @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
+            @Parameter(name = "page", description = "query string(RequestParam) - 몇번째 페이지인지 가리키는 page 변수 입니다! (0부터 시작)"),
+            @Parameter(name = "size", description = "query string(RequestParam) - 몇 개씩 불러올지 개수를 세는 변수입니다. (1 이상 자연수로 설정)"),
+    })
+    public ApiResponse<?> getAllMyCommunity(@RequestHeader("Authorization") String accessToken,
+                                        @RequestParam(name = "page") Integer page,
+                                        @RequestParam(name = "size") Integer size) {
+        String gmail = jwtTokenProvider.getGoogleEmail(accessToken);
+        return ApiResponse.onSuccess(myPageService.getCommunityList(gmail, page, size));
+    }
 }

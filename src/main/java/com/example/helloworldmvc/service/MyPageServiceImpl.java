@@ -2,21 +2,21 @@ package com.example.helloworldmvc.service;
 
 import com.example.helloworldmvc.apiPayload.GeneralException;
 import com.example.helloworldmvc.apiPayload.code.status.ErrorStatus;
-import com.example.helloworldmvc.apiPayload.handler.UserHandler;
-import com.example.helloworldmvc.domain.Center;
-import com.example.helloworldmvc.domain.File;
-import com.example.helloworldmvc.domain.Summary;
-import com.example.helloworldmvc.domain.User;
+import com.example.helloworldmvc.converter.MyPageConverter;
+import com.example.helloworldmvc.domain.*;
 import com.example.helloworldmvc.domain.mapping.Reservation;
 import com.example.helloworldmvc.repository.*;
 import com.example.helloworldmvc.web.dto.MyPageRequestDTO;
+import com.example.helloworldmvc.web.dto.MyPageResponseDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.helloworldmvc.apiPayload.code.status.ErrorStatus.USER_NOT_FOUND;
@@ -31,6 +31,7 @@ public class MyPageServiceImpl implements MyPageService{
     private final ReservationRepository reservationRepository;
     private final FileRepository fileRepository;
     private final S3Service s3Service;
+    private final CommunityRepository communityRepository;
 
 
 
@@ -87,5 +88,17 @@ public class MyPageServiceImpl implements MyPageService{
         user.setStatusTempDeactivated();
         userRepository.save(user);
         return  userId+" 유저가 삭제 되었습니다";
+    }
+
+    @Override
+    public MyPageResponseDTO.MyCommunityListResDTO getCommunityList(String userId, Integer page, Integer size) {
+        User user = userRepository.findByEmail(userId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Community> communityPage = communityRepository.findAllByUserId(user.getId(), pageRequest);
+        Page<MyPageResponseDTO.MyCommunityResDTO> communityResPage = communityPage.map(MyPageConverter::toMyCommunityRes);
+
+        return MyPageConverter.toAllMyCommunityListRes(communityResPage, user.getId());
     }
 }
