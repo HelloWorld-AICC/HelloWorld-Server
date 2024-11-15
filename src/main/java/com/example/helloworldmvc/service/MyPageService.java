@@ -19,4 +19,6 @@ public interface MyPageService {
 
     MyPageResponseDTO.MyCommunityListResDTO getCommunityList(String userId, Integer page, Integer size);
 
+    MyPageResponseDTO.MyCommentListResDTO getAllCommentsByUser(String userId, Integer page, Integer size);
+
 }

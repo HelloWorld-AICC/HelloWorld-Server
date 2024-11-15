@@ -103,4 +103,25 @@ public class MyPageResponseDTO {
         LocalDateTime uploadedAt;
         String category;
     }
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MyCommentListResDTO {
+        Long userId;
+        List<MyCommentResDTO> allMyCommentList;
+    }
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MyCommentResDTO {
+        Long communityId;
+        Long commentId;
+        String commentContent;
+        LocalDateTime uploadedAt;
+        String communityTitle;
+    }
 }

@@ -122,4 +122,21 @@ public class MyPageConverter {
                 .allMyCommunityList(communityList.getContent())
                 .build();
     }
+
+    public static MyPageResponseDTO.MyCommentResDTO toMyCommentRes(Comment comment) {
+        return MyPageResponseDTO.MyCommentResDTO.builder()
+                .communityId(comment.getCommunity().getId())
+                .commentId(comment.getId())
+                .commentContent(comment.getContent())
+                .uploadedAt(comment.getCreatedAt())
+                .communityTitle(comment.getCommunity().getTitle())
+                .build();
+    }
+
+    public static MyPageResponseDTO.MyCommentListResDTO toMyCommentListRes(Page<MyPageResponseDTO.MyCommentResDTO> commentList, Long userId) {
+        return MyPageResponseDTO.MyCommentListResDTO.builder()
+                .userId(userId)
+                .allMyCommentList(commentList.getContent())
+                .build();
+    }
 }
