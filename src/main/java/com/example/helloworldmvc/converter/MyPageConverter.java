@@ -2,18 +2,11 @@ package com.example.helloworldmvc.converter;
 
 import com.example.helloworldmvc.apiPayload.GeneralException;
 import com.example.helloworldmvc.apiPayload.code.status.ErrorStatus;
-import com.example.helloworldmvc.domain.Center;
-import com.example.helloworldmvc.domain.File;
-import com.example.helloworldmvc.domain.Summary;
-import com.example.helloworldmvc.domain.User;
+import com.example.helloworldmvc.domain.*;
 import com.example.helloworldmvc.domain.mapping.Reservation;
-import com.example.helloworldmvc.repository.UserRepository;
-import com.example.helloworldmvc.web.dto.CenterResponseDTO;
-import com.example.helloworldmvc.web.dto.MyPageRequestDTO;
 import com.example.helloworldmvc.web.dto.MyPageResponseDTO;
 import org.springframework.data.domain.Page;
 
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -109,6 +102,24 @@ public class MyPageConverter {
         return MyPageResponseDTO.AllReservationListRes.builder()
                 .userId(userId)
                 .allReservationList(allReservationRes)
+                .build();
+    }
+
+
+
+    public static MyPageResponseDTO.MyCommunityResDTO toMyCommunityRes(Community community) {
+        return MyPageResponseDTO.MyCommunityResDTO.builder()
+                .communityId(community.getId())
+                .title(community.getTitle())
+                .uploadedAt(community.getCreatedAt())
+                .category(community.getCommunityCategory().name())
+                .build();
+    }
+
+    public static MyPageResponseDTO.MyCommunityListResDTO toAllMyCommunityListRes(Page<MyPageResponseDTO.MyCommunityResDTO> communityList, Long userId) {
+        return MyPageResponseDTO.MyCommunityListResDTO.builder()
+                .userId(userId)
+                .allMyCommunityList(communityList.getContent())
                 .build();
     }
 }

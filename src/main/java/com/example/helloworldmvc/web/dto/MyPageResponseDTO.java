@@ -1,9 +1,5 @@
 package com.example.helloworldmvc.web.dto;
 
-import com.example.helloworldmvc.domain.File;
-import com.example.helloworldmvc.domain.User;
-import com.example.helloworldmvc.domain.enums.SummaryStatus;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -87,5 +83,24 @@ public class MyPageResponseDTO {
     @AllArgsConstructor
     public static class PatchProfileEmail{
         String email;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MyCommunityListResDTO {
+        Long userId;
+        List<MyCommunityResDTO> allMyCommunityList;
+    }
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MyCommunityResDTO {
+        Long communityId;
+        String title;
+        LocalDateTime uploadedAt;
+        String category;
     }
 }
