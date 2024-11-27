@@ -15,7 +15,7 @@ public interface MyPageService {
 
     void setUserProfile(String gmail, MyPageRequestDTO.PatchProfile request);
 
-    String deactivateUser(String userId);
+    MyPageResponseDTO.DeleteUserDTO deactivateUser(String userId);
 
     MyPageResponseDTO.MyCommunityListResDTO getCommunityList(String userId, Integer page, Integer size);
 

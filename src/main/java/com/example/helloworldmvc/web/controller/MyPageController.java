@@ -127,7 +127,7 @@ public class MyPageController {
     @Parameters({
             @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
     })
-    public ApiResponse<String> deactivateUser(@RequestHeader(name = "Authorization") String accessToken) {
+    public ApiResponse<MyPageResponseDTO.DeleteUserDTO> deactivateUser(@RequestHeader(name = "Authorization") String accessToken) {
         String userId = jwtTokenProvider.getGoogleEmail(accessToken);
         return ApiResponse.onSuccess(myPageService.deactivateUser(userId));
     }

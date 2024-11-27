@@ -124,4 +124,12 @@ public class MyPageResponseDTO {
         LocalDateTime uploadedAt;
         String communityTitle;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DeleteUserDTO{
+        String message;
+    }
 }
