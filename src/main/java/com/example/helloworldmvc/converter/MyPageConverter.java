@@ -6,6 +6,7 @@ import com.example.helloworldmvc.domain.*;
 import com.example.helloworldmvc.domain.mapping.Reservation;
 import com.example.helloworldmvc.web.dto.MyPageResponseDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.parameters.P;
 
 import java.util.Comparator;
 import java.util.List;
@@ -137,6 +138,12 @@ public class MyPageConverter {
         return MyPageResponseDTO.MyCommentListResDTO.builder()
                 .userId(userId)
                 .allMyCommentList(commentList.getContent())
+                .build();
+    }
+
+    public static MyPageResponseDTO.DeleteUserDTO deleteUserRes(String userId){
+        return MyPageResponseDTO.DeleteUserDTO.builder().
+                message(userId+ " 유저가 삭제 되었습니다")
                 .build();
     }
 }

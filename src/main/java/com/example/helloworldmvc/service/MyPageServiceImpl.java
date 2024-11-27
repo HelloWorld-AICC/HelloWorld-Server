@@ -84,11 +84,11 @@ public class MyPageServiceImpl implements MyPageService{
     }
 
     @Override
-    public String deactivateUser(String userId) {
+    public MyPageResponseDTO.DeleteUserDTO deactivateUser(String userId) {
         User user = userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(USER_NOT_FOUND));
         user.setStatusTempDeactivated();
         userRepository.save(user);
-        return  userId+" 유저가 삭제 되었습니다";
+        return  MyPageConverter.deleteUserRes(userId);
     }
 
     @Override
