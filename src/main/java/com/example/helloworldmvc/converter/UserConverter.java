@@ -2,6 +2,7 @@ package com.example.helloworldmvc.converter;
 
 import com.example.helloworldmvc.domain.User;
 import com.example.helloworldmvc.domain.enums.Role;
+import com.example.helloworldmvc.domain.enums.UserStatus;
 import com.example.helloworldmvc.web.dto.GoogleDetailResponse;
 import com.example.helloworldmvc.web.dto.TokenDTO;
 import com.example.helloworldmvc.web.dto.TokenListDTO;
@@ -17,6 +18,7 @@ public class UserConverter {
                 .email(googleProfile.getEmail())
                 .name(name)
                 .role(Role.USER)
+                .status(UserStatus.ACTIVE)
                 .build();
     }
     public static User toGoogleUser(String email){
