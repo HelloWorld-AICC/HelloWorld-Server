@@ -43,7 +43,7 @@ public class CommunityController {
         return ApiResponse.onSuccess(communityService.createCommunityPost(gmail, categoryId, request));
     }
 
-    @GetMapping(value = "/{category_id}/create")
+    @GetMapping(value = "/{category_id}/list")
     @Operation(summary = "커뮤니티 글 목록 조회 API", description = "해당 카테고리 게시글 목록을 조회하는 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
