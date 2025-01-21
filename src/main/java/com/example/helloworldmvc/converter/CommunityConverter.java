@@ -35,7 +35,7 @@ public class CommunityConverter {
     }
 
     public static CommunityResponseDTO.PostDTO toPostDTO(Community community){
-        String imageUrl = "null";
+        String imageUrl = null;
         if(!community.getFileList().isEmpty()){
             imageUrl = community.getFileList().get(0).getUrl();
         }
