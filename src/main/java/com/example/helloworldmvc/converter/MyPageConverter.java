@@ -74,6 +74,7 @@ public class MyPageConverter {
                 .userImg(userImg)
                 .chatSummary(summary.getChatSummary())
                 .mainPoint(summary.getMainPoint())
+                .roomId(summary.getRoomId())
                 .build();
     }
 

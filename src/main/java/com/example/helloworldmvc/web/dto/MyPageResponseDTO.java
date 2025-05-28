@@ -54,6 +54,7 @@ public class MyPageResponseDTO {
         String userImg;
         String chatSummary;
         String mainPoint;
+        String roomId;
     }
 
     @Builder

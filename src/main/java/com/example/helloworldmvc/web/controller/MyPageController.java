@@ -73,7 +73,7 @@ public class MyPageController {
     }
 
     @GetMapping("/detailSummary")
-    @Operation(summary = "상세 상담 조회 API", description = "(외국인,상담사)상세 상담 조회 화면 API입니다.")
+    @Operation(summary = "채팅 상담 요약 상세 보기 API", description = "채팅 상담 요약 상세 보기 화면 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4001", description = "사용자를 찾을수 없습니다.")
