@@ -1,6 +1,8 @@
 package com.example.helloworldmvc.service;
 
 import com.example.helloworldmvc.apiPayload.ApiResponse;
+import com.example.helloworldmvc.apiPayload.GeneralException;
+import com.example.helloworldmvc.apiPayload.code.status.ErrorStatus;
 import com.example.helloworldmvc.config.auth.GoogleClient;
 import com.example.helloworldmvc.config.auth.JwtTokenProvider;
 import com.example.helloworldmvc.converter.UserConverter;
@@ -25,6 +27,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import static com.example.helloworldmvc.apiPayload.code.status.ErrorStatus.RTK_INCORREXT;
 
 @Service
 @RequiredArgsConstructor
@@ -106,6 +110,36 @@ public class GoogleServiceImpl implements GoogleService {
 
             return UserConverter.toTokenList(tokenDTOList);
         }
+    }
+
+    @Override
+    public TokenListDTO reissueToken(String token) {
+        // refresh token 유효성 검증
+        if (!jwtTokenProvider.validateToken(token)) {
+            throw new GeneralException(ErrorStatus.EXPIRED_REFRESH_TOKEN);
+        }
+        String email = jwtTokenProvider.getTokenSub(token);
+        // Redis에서 email 기반으로 저장된 refresh token 값 가져오기
+        String refreshToken = (String) redisTemplate.opsForValue().get("RT:" + email);
+        if (refreshToken == null) {
+            throw new GeneralException(RTK_INCORREXT);
+        }
+
+        if (!refreshToken.equals(token)) {
+            throw new GeneralException(RTK_INCORREXT);
+        }
+        // refresh token 유효할 경우 새로운 토큰 생성
+        List<TokenDTO> tokenDTOList = new ArrayList<>();
+        TokenDTO newRefreshToken = jwtTokenProvider.createRefreshToken(email);
+        TokenDTO newAccessToken = jwtTokenProvider.createAccessToken(email);
+        tokenDTOList.add(newRefreshToken);
+        tokenDTOList.add(newAccessToken);
+        System.out.println("Access Token, Refresh Token 재발행: " + tokenDTOList);
+
+        // Redis에 refresh token 업데이트
+        redisTemplate.opsForValue().set("RT:" + email, newRefreshToken.getToken(), newRefreshToken.getTokenExpriresTime().getTime(), TimeUnit.MILLISECONDS);
+
+        return UserConverter.toTokenList(tokenDTOList);
     }
 
     @Override

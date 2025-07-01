@@ -172,4 +172,8 @@ public class JwtTokenProvider {
             throw new GeneralException(ErrorStatus.INVALID_ACCESS_TOKEN);
         }
     }
+    // 토큰에서 회원정보 추출 - email (payload의 subject)
+    public String getTokenSub(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    }
 }

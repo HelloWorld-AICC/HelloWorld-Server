@@ -74,6 +74,18 @@ public class UserController {
         return ApiResponse.onSuccess(userService.loginGmail(googleEmailRequest));
     }
 
+    @Operation(summary = "구글 로그인 토큰 재발급 API", description = "구글 로그인 Access Token 재발급 API")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+    })
+    @Parameters({
+            @Parameter(name = "token", description = "query string(RequestParam) - refreshToken 입력"),
+    })
+    @GetMapping("/login/reissue")
+    public ApiResponse<TokenListDTO> reissueGoogleLoginInfo(@RequestParam(value = "RTK") String token) {
+        return ApiResponse.onSuccess(googleService.reissueToken(token));
+    }
+
 //    @Operation(summary = "모바일 구글 로그인 API", description = "구글 로그인 및 회원 가입을 진행")
 //    @ApiResponses({
 //            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),

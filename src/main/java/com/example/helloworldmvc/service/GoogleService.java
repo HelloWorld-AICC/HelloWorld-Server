@@ -14,6 +14,8 @@ public interface GoogleService {
 
     TokenListDTO loginGoogle(String code);
 
+    TokenListDTO reissueToken(String token);
+
     List<TokenDTO> loginGoogleMobile(String code) throws GeneralSecurityException, IOException;
 
     String getIdTokenFromGoogle(String code) throws IOException;
