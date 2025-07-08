@@ -4,6 +4,7 @@ import com.example.helloworldmvc.domain.common.BaseEntity;
 import com.example.helloworldmvc.domain.enums.CommunityCategory;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +34,11 @@ public class Community extends BaseEntity {
     private User user;
 
     @OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
+    @BatchSize(size = 20)
     private List<File> fileList = new ArrayList<>();
 
     @OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
+    @BatchSize(size = 20)
     private List<Comment> commentList = new ArrayList<>();
 
     public void setUser(User user) {

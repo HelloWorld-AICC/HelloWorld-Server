@@ -110,12 +110,19 @@ public class MyPageConverter {
 
 
     public static MyPageResponseDTO.MyCommunityResDTO toMyCommunityRes(Community community) {
+        String imageUrl = null;
+        if (!community.getFileList().isEmpty()) {
+            imageUrl = community.getFileList().get(0).getUrl();
+        }
+
         return MyPageResponseDTO.MyCommunityResDTO.builder()
                 .communityId(community.getId())
                 .title(community.getTitle())
                 .content(community.getContent())
                 .uploadedAt(community.getCreatedAt())
                 .category(community.getCommunityCategory().name())
+                .commentCnt((long) community.getCommentList().size())
+                .imageUrl(imageUrl)
                 .build();
     }
 
