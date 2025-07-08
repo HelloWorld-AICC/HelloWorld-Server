@@ -104,6 +104,8 @@ public class MyPageResponseDTO {
         String content;
         LocalDateTime uploadedAt;
         String category;
+        Long commentCnt;
+        String imageUrl;
     }
 
 
