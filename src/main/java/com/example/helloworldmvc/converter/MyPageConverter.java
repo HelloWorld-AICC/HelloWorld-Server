@@ -113,6 +113,7 @@ public class MyPageConverter {
         return MyPageResponseDTO.MyCommunityResDTO.builder()
                 .communityId(community.getId())
                 .title(community.getTitle())
+                .content(community.getContent())
                 .uploadedAt(community.getCreatedAt())
                 .category(community.getCommunityCategory().name())
                 .build();
