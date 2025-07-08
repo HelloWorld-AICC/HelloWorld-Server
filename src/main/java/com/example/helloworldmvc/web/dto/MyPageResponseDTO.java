@@ -101,6 +101,7 @@ public class MyPageResponseDTO {
     public static class MyCommunityResDTO {
         Long communityId;
         String title;
+        String content;
         LocalDateTime uploadedAt;
         String category;
     }
