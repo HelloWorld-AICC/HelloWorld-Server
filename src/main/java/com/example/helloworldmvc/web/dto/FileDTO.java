@@ -10,4 +10,12 @@ import lombok.*;
 public class FileDTO {
     private Long imageId;
     private String imageUrl;
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FileDetailRes{
+        String fileUrl;
+        String fileType;
+    }
 }
