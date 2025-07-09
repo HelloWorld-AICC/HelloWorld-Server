@@ -15,6 +15,8 @@ public class File {
 
     private String url;
 
+    private String fileType;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;

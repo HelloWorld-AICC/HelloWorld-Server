@@ -25,7 +25,8 @@ public class S3Service {
 
     public File setImage(MultipartFile file, User user){
         String pictureUrl = s3Manager.uploadFile(s3Manager.generateUserKeyName(createFileName()), file);
-        return fileRepository.save(FileConverter.toFile(pictureUrl, user, null));
+        String fileType = this.getFileExtension(file);
+        return fileRepository.save(FileConverter.toFile(pictureUrl, fileType ,user, null));
     }
 
     @Transactional
@@ -39,12 +40,26 @@ public class S3Service {
 
     public File setCommunityImage(MultipartFile file, Community community) {
         String url = s3Manager.uploadFile(s3Manager.generateUserKeyName(createFileName()), file);
-        File file1 = FileConverter.toFile(url, null, null);
+        String fileType = this.getFileExtension(file);
+        File file1 = FileConverter.toFile(url, fileType,null, null);
         file1.setCommunity(community);
         return fileRepository.save(file1);
     }
     public Uuid createFileName() {
         String uuid = UUID.randomUUID().toString();
         return uuidRepository.save(Uuid.builder().uuid(uuid).build());
+    }
+    /**
+     * 파일 확장자 가져오기
+     * @author 이승우
+     * @param file MultipartFile 객체
+     * @return 파일 확장자 (예: ".jpg", ".png")
+     */
+    public String getFileExtension(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename != null && originalFilename.contains(".")) {
+            return originalFilename.substring(originalFilename.lastIndexOf("."));
+        }
+        return ""; // 확장자가 없는 경우 빈 문자열 반환 또는 예외 처리
     }
 }

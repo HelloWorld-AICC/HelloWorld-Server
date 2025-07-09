@@ -34,6 +34,8 @@ public class CommunityResponseDTO {
         LocalDateTime created_at;
         Integer commentNum;
         String imageUrl;
+        String content;
+        Long category_id;
     }
 
     @Builder
@@ -43,8 +45,9 @@ public class CommunityResponseDTO {
     public static class PostDetailDTO{
         String title;
         String content;
+        String communityWriterEmail;
         LocalDateTime created_at;
-        List<String> fileList;
+        List<FileDTO.FileDetailRes> fileList;
         List<CommentDTO> commentDTOList;
     }
 
@@ -54,6 +57,7 @@ public class CommunityResponseDTO {
     @AllArgsConstructor
     public static class CommentDTO{
         Long anonymousName;
+        String commentWriterEmail;
         LocalDateTime created_at;
         String content;
     }

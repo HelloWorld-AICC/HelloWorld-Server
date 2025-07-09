@@ -5,6 +5,7 @@ import com.example.helloworldmvc.domain.Community;
 import com.example.helloworldmvc.domain.enums.CommunityCategory;
 import com.example.helloworldmvc.web.dto.CommunityRequestDTO;
 import com.example.helloworldmvc.web.dto.CommunityResponseDTO;
+import com.example.helloworldmvc.web.dto.FileDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
@@ -27,14 +28,14 @@ public class CommunityConverter {
                 .build();
     }
 
-    public static CommunityResponseDTO.PostListDTO toPostListDTO(Page<Community> postList){
-        List<CommunityResponseDTO.PostDTO> posts = postList.stream().map(CommunityConverter::toPostDTO).toList();
+    public static CommunityResponseDTO.PostListDTO toPostListDTO(Page<Community> postList, Long categoryId){
+        List<CommunityResponseDTO.PostDTO> posts = postList.stream().map(i -> CommunityConverter.toPostDTO(i, categoryId)).toList();
         return CommunityResponseDTO.PostListDTO.builder()
                 .postDTOList(posts)
                 .build();
     }
 
-    public static CommunityResponseDTO.PostDTO toPostDTO(Community community){
+    public static CommunityResponseDTO.PostDTO toPostDTO(Community community, Long categoryId){
         String imageUrl = null;
         if(!community.getFileList().isEmpty()){
             imageUrl = community.getFileList().get(0).getUrl();
@@ -45,19 +46,24 @@ public class CommunityConverter {
                 .created_at(community.getCreatedAt())
                 .commentNum(community.getCommentList().size())
                 .imageUrl(imageUrl)
+                .content(community.getContent())
+                .category_id(categoryId)
                 .build();
     }
 
     public static CommunityResponseDTO.PostDetailDTO toPostDetailDTO(Community community, Page<Comment> commentList){
-        List<String> list = new ArrayList<>();
+        List<FileDTO.FileDetailRes> list = new ArrayList<FileDTO.FileDetailRes>();
         if(!community.getFileList().isEmpty()){
-            community.getFileList().stream().map(file -> list.add(file.getUrl())).collect(Collectors.toList());
+            community.getFileList().stream().forEach(file -> {
+                list.add(FileConverter.toFileDetailRes(file.getUrl(), file.getFileType()));
+            });
         }
-        else list.add("NULL");
+        else list.add(FileConverter.toFileDetailRes("",""));
         List<CommunityResponseDTO.CommentDTO> comments = commentList.stream().map(CommunityConverter::toCommentDTO).toList();
         return CommunityResponseDTO.PostDetailDTO.builder()
                 .title(community.getTitle())
                 .content(community.getContent())
+                .communityWriterEmail(community.getUser().getEmail())
                 .created_at(community.getCreatedAt())
                 .fileList(list)
                 .commentDTOList(comments)
@@ -67,6 +73,7 @@ public class CommunityConverter {
     public static CommunityResponseDTO.CommentDTO toCommentDTO(Comment comment){
         return CommunityResponseDTO.CommentDTO.builder()
                 .anonymousName(comment.getAnonymous())
+                .commentWriterEmail(comment.getUser().getEmail())
                 .created_at(comment.getCreatedAt())
                 .content(comment.getContent())
                 .build();
