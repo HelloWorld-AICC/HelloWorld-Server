@@ -27,14 +27,14 @@ public class CommunityConverter {
                 .build();
     }
 
-    public static CommunityResponseDTO.PostListDTO toPostListDTO(Page<Community> postList){
-        List<CommunityResponseDTO.PostDTO> posts = postList.stream().map(CommunityConverter::toPostDTO).toList();
+    public static CommunityResponseDTO.PostListDTO toPostListDTO(Page<Community> postList, Long categoryId){
+        List<CommunityResponseDTO.PostDTO> posts = postList.stream().map(i -> CommunityConverter.toPostDTO(i, categoryId)).toList();
         return CommunityResponseDTO.PostListDTO.builder()
                 .postDTOList(posts)
                 .build();
     }
 
-    public static CommunityResponseDTO.PostDTO toPostDTO(Community community){
+    public static CommunityResponseDTO.PostDTO toPostDTO(Community community, Long categoryId){
         String imageUrl = null;
         if(!community.getFileList().isEmpty()){
             imageUrl = community.getFileList().get(0).getUrl();
@@ -45,6 +45,8 @@ public class CommunityConverter {
                 .created_at(community.getCreatedAt())
                 .commentNum(community.getCommentList().size())
                 .imageUrl(imageUrl)
+                .content(community.getContent())
+                .category_id(categoryId)
                 .build();
     }
 

@@ -34,6 +34,8 @@ public class CommunityResponseDTO {
         LocalDateTime created_at;
         Integer commentNum;
         String imageUrl;
+        String content;
+        Long category_id;
     }
 
     @Builder

@@ -51,7 +51,7 @@ public class CommunityServiceImpl implements CommunityService {
         User user = userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         CommunityCategory communityCategory = CommunityConverter.toCommunityCategory(categoryId);
         Page<Community> communityList = communityRepository.findAllByCommunityCategory(communityCategory, PageRequest.of(page, size));
-        return CommunityConverter.toPostListDTO(communityList);
+        return CommunityConverter.toPostListDTO(communityList, categoryId);
     }
 
     @Override
