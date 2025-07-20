@@ -103,7 +103,7 @@ public class MyPageResponseDTO {
         String title;
         String content;
         LocalDateTime uploadedAt;
-        String category;
+        Long category;
         Long commentCnt;
         String imageUrl;
     }

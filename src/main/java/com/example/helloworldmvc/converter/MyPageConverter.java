@@ -120,7 +120,7 @@ public class MyPageConverter {
                 .title(community.getTitle())
                 .content(community.getContent())
                 .uploadedAt(community.getCreatedAt())
-                .category(community.getCommunityCategory().name())
+                .category(CommunityConverter.toCategoryId(community.getCommunityCategory()))
                 .commentCnt((long) community.getCommentList().size())
                 .imageUrl(imageUrl)
                 .build();
