@@ -96,4 +96,18 @@ public class CommunityConverter {
         }
         return communityCategory;
     }
+
+    public static Long toCategoryId(CommunityCategory category) {
+        switch (category) {
+            case WORRY:
+                return 0L;
+            case MEDICAL:
+                return 1L;
+            case QUALIFICATION:
+                return 2L;
+            default:
+                return 3L;
+        }
+    }
+
 }
