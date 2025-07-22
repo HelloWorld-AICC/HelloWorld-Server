@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface CommunityRepository extends JpaRepository<Community, Long> {
-    Page<Community> findAllByCommunityCategory(CommunityCategory category, Pageable pageable);
+    Page<Community> findAllByCommunityCategoryOrderByCreatedAtDesc(CommunityCategory category, Pageable pageable);
 
 //    Page<Community> findAllByUserId(Long userId, Pageable pageable);
     @EntityGraph(attributePaths = {"user"})
