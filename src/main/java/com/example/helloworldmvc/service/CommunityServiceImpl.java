@@ -50,7 +50,7 @@ public class CommunityServiceImpl implements CommunityService {
     public CommunityResponseDTO.PostListDTO getCommunityList(String userId, Long categoryId, Integer page, Integer size) {
         User user = userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         CommunityCategory communityCategory = CommunityConverter.toCommunityCategory(categoryId);
-        Page<Community> communityList = communityRepository.findAllByCommunityCategory(communityCategory, PageRequest.of(page, size));
+        Page<Community> communityList = communityRepository.findAllByCommunityCategoryOrderByCreatedAtDesc(communityCategory, PageRequest.of(page, size));
         return CommunityConverter.toPostListDTO(communityList, categoryId);
     }
 
