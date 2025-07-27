@@ -127,6 +127,7 @@ public class MyPageResponseDTO {
         String commentContent;
         LocalDateTime uploadedAt;
         String communityTitle;
+        Long categoryId;
     }
 
     @Builder
