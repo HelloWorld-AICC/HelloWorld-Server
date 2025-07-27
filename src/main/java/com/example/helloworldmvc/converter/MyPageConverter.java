@@ -140,6 +140,7 @@ public class MyPageConverter {
                 .commentContent(comment.getContent())
                 .uploadedAt(comment.getCreatedAt())
                 .communityTitle(comment.getCommunity().getTitle())
+                .categoryId(CommunityConverter.toCategoryId(comment.getCommunity().getCommunityCategory()))
                 .build();
     }
 
