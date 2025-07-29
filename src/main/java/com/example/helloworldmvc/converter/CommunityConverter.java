@@ -58,7 +58,6 @@ public class CommunityConverter {
                 list.add(FileConverter.toFileDetailRes(file.getUrl(), file.getFileType()));
             });
         }
-        else list.add(FileConverter.toFileDetailRes("",""));
         List<CommunityResponseDTO.CommentDTO> comments = commentList.stream().map(CommunityConverter::toCommentDTO).toList();
         return CommunityResponseDTO.PostDetailDTO.builder()
                 .title(community.getTitle())
