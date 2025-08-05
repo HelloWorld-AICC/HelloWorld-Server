@@ -61,4 +61,13 @@ public class CommunityResponseDTO {
         LocalDateTime created_at;
         String content;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DeletedPostDTO{
+        String categoryName;
+        Long post_id;
+    }
 }
