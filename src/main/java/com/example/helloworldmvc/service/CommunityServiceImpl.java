@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -65,5 +66,16 @@ public class CommunityServiceImpl implements CommunityService {
         List<Comment> subList = commentList.subList(start, end);
         Page<Comment> commentPage = new PageImpl<>(subList, pageRequest, commentList.size());
         return CommunityConverter.toPostDetailDTO(community, commentPage);
+    }
+
+    @Override
+    public CommunityResponseDTO.DeletedPostDTO deleteCommunityPost(String userId, Long categoryId, Long communityId) {
+        User user = userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        Community community = communityRepository.findById(communityId).orElseThrow(() -> new GeneralException(ErrorStatus.COMMUNITY_POST_NOT_FOUND));
+        if(!community.getUser().getId().equals(user.getId())){
+            throw new GeneralException(ErrorStatus.COMMUNITY_NOT_OWNER);
+        }
+        communityRepository.deleteById(community.getId());
+        return CommunityConverter.toDeletedPostDTO(community);
     }
 }

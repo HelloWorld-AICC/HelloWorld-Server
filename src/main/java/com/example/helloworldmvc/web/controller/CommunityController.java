@@ -104,4 +104,22 @@ public class CommunityController {
     }
 
     }
+
+    @DeleteMapping(value = "/{category_id}/{community_id}/delete")
+    @Operation(summary = "커뮤니티 글 삭제 API", description = "커뮤니티 게시판에 글을 삭제하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4001", description = "사용자를 찾을수 없습니다.")
+    })
+    @Parameters({
+            @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
+            @Parameter(name = "category_id", description = "PathVariable - 게시글 카테고리 아이디"),
+            @Parameter(name = "community_id", description = "PathVariable - 게시글 아이디"),
+    })
+    public ApiResponse<CommunityResponseDTO.DeletedPostDTO> deleteCommunity(@RequestHeader(name = "Authorization") String accessToken,
+                                                                            @PathVariable(name = "category_id") Long categoryId,
+                                                                            @PathVariable(name = "community_id") Long communityId) {
+        String gmail = jwtTokenProvider.getGoogleEmail(accessToken);
+        return ApiResponse.onSuccess(communityService.deleteCommunityPost(gmail, categoryId, communityId));
+    }
 }

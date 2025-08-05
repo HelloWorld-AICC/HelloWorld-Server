@@ -11,4 +11,6 @@ public interface CommunityService {
     CommunityResponseDTO.CreatedPostDTO createCommunityPost(String userId, Long categoryId, CommunityRequestDTO.CreatePostDTO request);
     CommunityResponseDTO.PostListDTO getCommunityList(String userId, Long categoryId, Integer page, Integer size);
     CommunityResponseDTO.PostDetailDTO getCommunityDetail(String userId, Long communityId, Integer page, Integer size);
+    CommunityResponseDTO.DeletedPostDTO deleteCommunityPost(String userId, Long categoryId, Long communityId);
+
 }

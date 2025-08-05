@@ -109,4 +109,11 @@ public class CommunityConverter {
         }
     }
 
+    public static CommunityResponseDTO.DeletedPostDTO toDeletedPostDTO(Community community){
+        return CommunityResponseDTO.DeletedPostDTO.builder()
+                .categoryName(community.getCommunityCategory().name())
+                .post_id(community.getId())
+                .build();
+    }
+
 }

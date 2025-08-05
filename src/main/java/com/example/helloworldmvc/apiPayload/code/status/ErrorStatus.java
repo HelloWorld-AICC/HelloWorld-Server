@@ -45,6 +45,8 @@ ErrorStatus implements BaseErrorCode {
     LANGUAGE_NOT_MATCHING(HttpStatus.NOT_FOUND, "CENTER4003", "해당 언어의 상담사가 없습니다."),
     //글 관련 응답
     COMMUNITY_NOT_FOUND(HttpStatus.NOT_FOUND,"COMMUNITY4001","글을 찾을 수 없습니다"),
+    COMMUNITY_NOT_OWNER(HttpStatus.NOT_ACCEPTABLE,"COMMUNITY4002","해당 글의 소유자가 아닙니다."),
+
     //언어 관련 응답
     LANGUAGE_NOT_EXIST(HttpStatus.NOT_FOUND, "LANGUAGE4001", "해당 언어가 없습니다.");
 
