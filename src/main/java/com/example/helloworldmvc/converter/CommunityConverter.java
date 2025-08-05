@@ -51,7 +51,7 @@ public class CommunityConverter {
                 .build();
     }
 
-    public static CommunityResponseDTO.PostDetailDTO toPostDetailDTO(Community community, Page<Comment> commentList){
+    public static CommunityResponseDTO.PostDetailDTO toPostDetailDTO(Community community, Page<Comment> commentList, Boolean isOwner){
         List<FileDTO.FileDetailRes> list = new ArrayList<FileDTO.FileDetailRes>();
         if(!community.getFileList().isEmpty()){
             community.getFileList().stream().forEach(file -> {
@@ -64,6 +64,7 @@ public class CommunityConverter {
                 .content(community.getContent())
                 .communityWriterEmail(community.getUser().getEmail())
                 .created_at(community.getCreatedAt())
+                .isOwner(isOwner)
                 .fileList(list)
                 .commentDTOList(comments)
                 .build();

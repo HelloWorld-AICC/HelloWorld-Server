@@ -65,7 +65,11 @@ public class CommunityServiceImpl implements CommunityService {
         int end = Math.min((start + pageRequest.getPageSize()), commentList.size());
         List<Comment> subList = commentList.subList(start, end);
         Page<Comment> commentPage = new PageImpl<>(subList, pageRequest, commentList.size());
-        return CommunityConverter.toPostDetailDTO(community, commentPage);
+        boolean isOwner = false;
+        if(community.getUser().getEmail().equals(user.getEmail())) {
+            isOwner = true;
+        }
+        return CommunityConverter.toPostDetailDTO(community, commentPage, isOwner);
     }
 
     @Override

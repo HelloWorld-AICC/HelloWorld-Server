@@ -49,6 +49,7 @@ public class CommunityResponseDTO {
         LocalDateTime created_at;
         List<FileDTO.FileDetailRes> fileList;
         List<CommentDTO> commentDTOList;
+        Boolean isOwner;
     }
 
     @Builder
