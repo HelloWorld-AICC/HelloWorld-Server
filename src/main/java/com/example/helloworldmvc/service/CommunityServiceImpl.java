@@ -82,4 +82,25 @@ public class CommunityServiceImpl implements CommunityService {
         communityRepository.deleteById(community.getId());
         return CommunityConverter.toDeletedPostDTO(community);
     }
+
+    @Override
+    public CommunityResponseDTO.ModifyPostDTO modifyCommunityPost(String userId, Long communityId, CommunityRequestDTO.ModifyPostDTO modifyPostDTO) {
+        User user = userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        Community community = communityRepository.findById(communityId).orElseThrow(() -> new GeneralException(ErrorStatus.COMMUNITY_POST_NOT_FOUND));
+        if(!community.getUser().getId().equals(user.getId())){
+            throw new GeneralException(ErrorStatus.COMMUNITY_NOT_OWNER);
+        }
+        if(!modifyPostDTO.getTitle().isEmpty()){
+            community.setTitle(modifyPostDTO.getTitle());
+        }
+        if(!modifyPostDTO.getContent().isEmpty()){
+            community.setContent(modifyPostDTO.getContent());
+        }
+        boolean isOwner = false;
+        if(community.getUser().getEmail().equals(user.getEmail())) {
+            isOwner = true;
+        }
+        communityRepository.save(community);
+        return CommunityConverter.toModifyPostDTO(community, isOwner);
+    }
 }

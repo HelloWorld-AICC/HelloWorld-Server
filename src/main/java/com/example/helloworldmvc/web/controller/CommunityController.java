@@ -122,4 +122,22 @@ public class CommunityController {
         String gmail = jwtTokenProvider.getGoogleEmail(accessToken);
         return ApiResponse.onSuccess(communityService.deleteCommunityPost(gmail, categoryId, communityId));
     }
+
+    @PatchMapping(value = "/{category_id}/{community_id}/modify")
+    @Operation(summary = "커뮤니티 글 수정 API", description = "커뮤니티 게시판에 글을 수정하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4001", description = "사용자를 찾을수 없습니다.")
+    })
+    @Parameters({
+            @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
+            @Parameter(name = "community_id", description = "PathVariable - 게시글 아이디"),
+    })
+    public ApiResponse<CommunityResponseDTO.ModifyPostDTO> modifyCommunity(@RequestHeader(name = "Authorization") String accessToken,
+                                                                            @PathVariable(name = "community_id") Long communityId,
+                                                                            @RequestBody @Valid CommunityRequestDTO.ModifyPostDTO modifyPostDTO
+                                                                           ) {
+        String gmail = jwtTokenProvider.getGoogleEmail(accessToken);
+        return ApiResponse.onSuccess(communityService.modifyCommunityPost(gmail, communityId, modifyPostDTO));
+    }
 }

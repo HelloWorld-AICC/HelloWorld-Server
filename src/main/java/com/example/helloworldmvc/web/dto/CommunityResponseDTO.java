@@ -71,4 +71,16 @@ public class CommunityResponseDTO {
         String categoryName;
         Long post_id;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ModifyPostDTO{
+        String title;
+        String content;
+        String communityWriterEmail;
+        LocalDateTime created_at;
+        Boolean isOwner;
+    }
 }
