@@ -46,4 +46,18 @@ public class CommentServiceImpl implements CommentService {
 
         return new CommentResponseDTO.commentCreateRes(savedComment.getId());
     }
+
+    @Override
+    public CommentResponseDTO.commentDeleteRes deleteComment(String userId, Long communityId, Long commentId) {
+        User user = userRepository.findByEmail(userId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.COMMUNITY_NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new GeneralException(ErrorStatus.COMMUNITY_COMMENT_NOT_FOUND));
+        if(!comment.getUser().equals(user)) {
+            throw new GeneralException(ErrorStatus.COMMUNITY_COMMENT_NOT_OWNER);
+        }
+        commentRepository.deleteById(commentId);
+        return new CommentResponseDTO.commentDeleteRes(commentId, communityId);
+    }
 }
