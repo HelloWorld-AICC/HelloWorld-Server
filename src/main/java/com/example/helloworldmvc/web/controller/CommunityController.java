@@ -140,4 +140,25 @@ public class CommunityController {
         String gmail = jwtTokenProvider.getGoogleEmail(accessToken);
         return ApiResponse.onSuccess(communityService.modifyCommunityPost(gmail, communityId, modifyPostDTO));
     }
+
+    @DeleteMapping(value = "/{community_id}/{comment_id}/comment/delete")
+    @Operation(summary = "커뮤니티 댓글 삭제 API", description = "커뮤니티 게시판에 댓글을 삭제 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4001", description = "사용자를 찾을수 없습니다.")
+    })
+    @Parameters({
+            @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
+            @Parameter(name = "community_id", description = "PathVariable - 게시글 아이디"),
+            @Parameter(name = "comment_id", description = "PathVariable - 게시글 댓글 아이디"),
+    })
+    public ApiResponse<CommentResponseDTO.commentDeleteRes> deleteComment(@RequestHeader(name = "Authorization") String accessToken,
+                                                                          @PathVariable(name = "community_id") Long communityId,
+                                                                          @PathVariable(name = "comment_id") Long commentId) {
+        {
+            String gmail = jwtTokenProvider.getGoogleEmail(accessToken);
+            return ApiResponse.onSuccess(commentService.deleteComment(gmail, communityId, commentId));
+        }
+
+    }
 }

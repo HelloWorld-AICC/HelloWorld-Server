@@ -15,4 +15,13 @@ public class CommentResponseDTO {
         Long commentId;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class commentDeleteRes{
+        Long commentId;
+        Long communityId;
+    }
+
 }

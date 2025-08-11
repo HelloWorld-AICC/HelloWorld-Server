@@ -46,6 +46,8 @@ ErrorStatus implements BaseErrorCode {
     //글 관련 응답
     COMMUNITY_NOT_FOUND(HttpStatus.NOT_FOUND,"COMMUNITY4001","글을 찾을 수 없습니다"),
     COMMUNITY_NOT_OWNER(HttpStatus.NOT_ACCEPTABLE,"COMMUNITY4002","해당 글의 소유자가 아닙니다."),
+    COMMUNITY_COMMENT_NOT_OWNER(HttpStatus.NOT_ACCEPTABLE,"COMMUNITY4003","해당 댓글의 소유자가 아닙니다."),
+    COMMUNITY_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"COMMUNITY4004","댓글을 찾을수 없습니다."),
 
     //언어 관련 응답
     LANGUAGE_NOT_EXIST(HttpStatus.NOT_FOUND, "LANGUAGE4001", "해당 언어가 없습니다.");

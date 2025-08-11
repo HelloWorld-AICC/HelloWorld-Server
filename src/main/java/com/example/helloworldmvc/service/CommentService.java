@@ -6,5 +6,6 @@ import com.example.helloworldmvc.web.dto.CommentResponseDTO;
 
 public interface CommentService {
     public CommentResponseDTO.commentCreateRes createComment(String userId, Long communityId, CommentRequestDTO.commentCreateReq requestBody);
+    public CommentResponseDTO.commentDeleteRes deleteComment(String userId, Long communityId, Long commentId);
 
 }
