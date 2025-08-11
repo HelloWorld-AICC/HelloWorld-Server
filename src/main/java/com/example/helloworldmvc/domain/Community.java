@@ -49,4 +49,11 @@ public class Community extends BaseEntity {
         user.getCommunityList().add(this);
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public void setContent(String content) {
+        this.content = content;
+    }
+
 }

@@ -20,4 +20,14 @@ public class CommunityRequestDTO {
 
         List<MultipartFile> images;
     }
+
+    @Getter
+    @Setter
+    public static class ModifyPostDTO {
+        @NotBlank
+        String title;
+
+        @NotBlank
+        String content;
+    }
 }

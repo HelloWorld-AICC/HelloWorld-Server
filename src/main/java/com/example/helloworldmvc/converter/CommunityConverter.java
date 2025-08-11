@@ -116,5 +116,13 @@ public class CommunityConverter {
                 .post_id(community.getId())
                 .build();
     }
-
+    public static CommunityResponseDTO.ModifyPostDTO toModifyPostDTO(Community community, Boolean isOwner){
+        return CommunityResponseDTO.ModifyPostDTO.builder()
+                .title(community.getTitle())
+                .content(community.getContent())
+                .communityWriterEmail(community.getUser().getEmail())
+                .created_at(community.getCreatedAt())
+                .isOwner(isOwner)
+                .build();
+    }
 }
