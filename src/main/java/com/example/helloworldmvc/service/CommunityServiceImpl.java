@@ -69,7 +69,7 @@ public class CommunityServiceImpl implements CommunityService {
         if(community.getUser().getEmail().equals(user.getEmail())) {
             isOwner = true;
         }
-        return CommunityConverter.toPostDetailDTO(community, commentPage, isOwner);
+        return CommunityConverter.toPostDetailDTO(community, commentPage, isOwner, userId);
     }
 
     @Override

@@ -45,7 +45,6 @@ public class CommunityResponseDTO {
     public static class PostDetailDTO{
         String title;
         String content;
-        String communityWriterEmail;
         LocalDateTime created_at;
         List<FileDTO.FileDetailRes> fileList;
         List<CommentDTO> commentDTOList;
@@ -58,9 +57,11 @@ public class CommunityResponseDTO {
     @AllArgsConstructor
     public static class CommentDTO{
         Long anonymousName;
+        Long commentId;
         String commentWriterEmail;
         LocalDateTime created_at;
         String content;
+        Boolean isOwner;
     }
 
     @Builder
