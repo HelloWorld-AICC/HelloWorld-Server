@@ -2,6 +2,7 @@ package com.example.helloworldmvc.converter;
 
 import com.example.helloworldmvc.domain.Comment;
 import com.example.helloworldmvc.domain.Community;
+import com.example.helloworldmvc.domain.User;
 import com.example.helloworldmvc.domain.enums.CommunityCategory;
 import com.example.helloworldmvc.web.dto.CommunityRequestDTO;
 import com.example.helloworldmvc.web.dto.CommunityResponseDTO;
@@ -51,18 +52,22 @@ public class CommunityConverter {
                 .build();
     }
 
-    public static CommunityResponseDTO.PostDetailDTO toPostDetailDTO(Community community, Page<Comment> commentList, Boolean isOwner){
+    public static CommunityResponseDTO.PostDetailDTO toPostDetailDTO(Community community, Page<Comment> commentList, Boolean isOwner, String userId){
         List<FileDTO.FileDetailRes> list = new ArrayList<FileDTO.FileDetailRes>();
         if(!community.getFileList().isEmpty()){
             community.getFileList().stream().forEach(file -> {
                 list.add(FileConverter.toFileDetailRes(file.getUrl(), file.getFileType()));
             });
         }
-        List<CommunityResponseDTO.CommentDTO> comments = commentList.stream().map(CommunityConverter::toCommentDTO).toList();
+        List<CommunityResponseDTO.CommentDTO> comments = commentList.stream().map(comment -> {
+            if(comment.getUser().getEmail().equals(userId)){
+                return toCommentDTO(comment, Boolean.TRUE);
+            }
+            return toCommentDTO(comment, Boolean.FALSE);
+        }).toList();
         return CommunityResponseDTO.PostDetailDTO.builder()
                 .title(community.getTitle())
                 .content(community.getContent())
-                .communityWriterEmail(community.getUser().getEmail())
                 .created_at(community.getCreatedAt())
                 .isOwner(isOwner)
                 .fileList(list)
@@ -70,12 +75,14 @@ public class CommunityConverter {
                 .build();
     }
 
-    public static CommunityResponseDTO.CommentDTO toCommentDTO(Comment comment){
+    public static CommunityResponseDTO.CommentDTO toCommentDTO(Comment comment, Boolean isOwner){
         return CommunityResponseDTO.CommentDTO.builder()
                 .anonymousName(comment.getAnonymous())
+                .commentId(comment.getId())
                 .commentWriterEmail(comment.getUser().getEmail())
                 .created_at(comment.getCreatedAt())
                 .content(comment.getContent())
+                .isOwner(isOwner)
                 .build();
     }
     public static CommunityCategory toCommunityCategory(Long categoryId){
