@@ -100,6 +100,20 @@ public class CommunityServiceImpl implements CommunityService {
         if(community.getUser().getEmail().equals(user.getEmail())) {
             isOwner = true;
         }
+        switch (modifyPostDTO.getCommunityCategoryId()){
+            case 1 :
+                community.setCommunityCategory(CommunityCategory.WORRY);
+                break;
+            case 2 :
+                community.setCommunityCategory(CommunityCategory.MEDICAL);
+                break;
+            case 3 :
+                community.setCommunityCategory(CommunityCategory.QUALIFICATION);
+                break;
+            default :
+                community.setCommunityCategory(CommunityCategory.ETC);
+                break;
+        }
         communityRepository.save(community);
         return CommunityConverter.toModifyPostDTO(community, isOwner);
     }

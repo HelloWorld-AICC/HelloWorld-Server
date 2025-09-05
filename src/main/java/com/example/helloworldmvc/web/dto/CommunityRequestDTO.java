@@ -29,5 +29,7 @@ public class CommunityRequestDTO {
 
         @NotBlank
         String content;
+
+        Integer communityCategoryId;
     }
 }

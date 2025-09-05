@@ -127,6 +127,7 @@ public class CommunityConverter {
         return CommunityResponseDTO.ModifyPostDTO.builder()
                 .title(community.getTitle())
                 .content(community.getContent())
+                .communityCategory(community.getCommunityCategory())
                 .communityWriterEmail(community.getUser().getEmail())
                 .created_at(community.getCreatedAt())
                 .isOwner(isOwner)
