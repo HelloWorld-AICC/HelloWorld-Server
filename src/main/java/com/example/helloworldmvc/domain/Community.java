@@ -55,5 +55,7 @@ public class Community extends BaseEntity {
     public void setContent(String content) {
         this.content = content;
     }
-
+    public void setCommunityCategory(CommunityCategory communityCategory) {
+        this.communityCategory = communityCategory;
+    }
 }

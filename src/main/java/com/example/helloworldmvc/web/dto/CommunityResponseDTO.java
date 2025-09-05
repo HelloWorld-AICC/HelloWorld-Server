@@ -1,5 +1,6 @@
 package com.example.helloworldmvc.web.dto;
 
+import com.example.helloworldmvc.domain.enums.CommunityCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -80,6 +81,7 @@ public class CommunityResponseDTO {
     public static class ModifyPostDTO{
         String title;
         String content;
+        CommunityCategory communityCategory;
         String communityWriterEmail;
         LocalDateTime created_at;
         Boolean isOwner;

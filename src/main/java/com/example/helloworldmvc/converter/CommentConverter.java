@@ -4,6 +4,7 @@ import com.example.helloworldmvc.domain.Comment;
 import com.example.helloworldmvc.domain.Community;
 import com.example.helloworldmvc.domain.User;
 import com.example.helloworldmvc.web.dto.CommentRequestDTO;
+import com.example.helloworldmvc.web.dto.CommentResponseDTO;
 
 public class CommentConverter {
 
@@ -13,6 +14,13 @@ public class CommentConverter {
                 .community(community)
                 .anonymous(anonymous)
                 .content(request.getContent())
+                .build();
+    }
+
+    public static CommentResponseDTO.commentCreateRes toCommentCreateRes(Long commentId, Long communityId) {
+        return CommentResponseDTO.commentCreateRes.builder()
+                .commentId(commentId)
+                .communityId(communityId)
                 .build();
     }
 }

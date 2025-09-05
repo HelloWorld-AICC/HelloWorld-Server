@@ -44,7 +44,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = CommentConverter.toComment(requestBody, community, user, anonymousNumber);
         Comment savedComment = commentRepository.save(comment);
 
-        return new CommentResponseDTO.commentCreateRes(savedComment.getId());
+        return CommentConverter.toCommentCreateRes(savedComment.getId(), communityId);
     }
 
     @Override
