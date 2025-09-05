@@ -13,6 +13,7 @@ public class CommentResponseDTO {
     @AllArgsConstructor
     public static class commentCreateRes{
         Long commentId;
+        Long communityId;
     }
 
     @Builder
