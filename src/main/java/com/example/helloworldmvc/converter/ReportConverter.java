@@ -9,6 +9,7 @@ public class ReportConverter {
     public static CommunityReport toReport(Long communityId, ReportStatus reportStatus) {
         return CommunityReport.builder()
                 .reportStatus(reportStatus)
+                .communityId(communityId)
                 .build();
     }
     public static ReportResDTO.ReportRes toReportResDTO(CommunityReport communityReport) {

@@ -32,7 +32,7 @@ public class ReportController {
     })
     @Parameters({
             @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
-            @Parameter(name = "community_id ", description = "PathVariable - 커뮤니티 글 아이디"),
+            @Parameter(name = "community_id", description = "PathVariable - 커뮤니티 글 아이디"),
     })
     public ApiResponse<ReportResDTO.ReportRes> createCommunityReport(@RequestHeader(name = "Authorization") String accessToken,
                                                                      @PathVariable(name = "community_id") Long targetId){
