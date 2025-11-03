@@ -96,8 +96,9 @@ public class GoogleServiceImpl implements GoogleService {
             List<TokenDTO> tokenDTOList = new ArrayList<>();
             tokenDTOList.add(refreshToken);
             tokenDTOList.add(accessToken);
-
-            return UserConverter.toTokenList(tokenDTOList);
+            // 로그인 진행
+            boolean isExist = true;
+            return UserConverter.toTokenList(tokenDTOList, isExist);
         } else {
             User user = userRepository.save(UserConverter.toGoogleUser(googleProfile));
             TokenDTO accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
@@ -107,8 +108,9 @@ public class GoogleServiceImpl implements GoogleService {
             List<TokenDTO> tokenDTOList = new ArrayList<>();
             tokenDTOList.add(refreshToken);
             tokenDTOList.add(accessToken);
-
-            return UserConverter.toTokenList(tokenDTOList);
+            // 회원가입 진행
+            boolean isExist = false;
+            return UserConverter.toTokenList(tokenDTOList, isExist);
         }
     }
 
@@ -139,7 +141,8 @@ public class GoogleServiceImpl implements GoogleService {
         // Redis에 refresh token 업데이트
         redisTemplate.opsForValue().set("RT:" + email, newRefreshToken.getToken(), newRefreshToken.getTokenExpriresTime().getTime(), TimeUnit.MILLISECONDS);
 
-        return UserConverter.toTokenList(tokenDTOList);
+        Boolean isExist = true;
+        return UserConverter.toTokenList(tokenDTOList, isExist);
     }
 
     @Override

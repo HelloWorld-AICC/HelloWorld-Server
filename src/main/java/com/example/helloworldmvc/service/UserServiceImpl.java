@@ -40,8 +40,9 @@ public class UserServiceImpl implements UserService {
         List<TokenDTO> tokenDTOList = new ArrayList<>();
         tokenDTOList.add(refreshToken);
         tokenDTOList.add(accessToken);
+        Boolean isExist = true;
 
-        return UserConverter.toTokenList(tokenDTOList);
+        return UserConverter.toTokenList(tokenDTOList, isExist);
 
     }
 

@@ -37,9 +37,10 @@ public class UserConverter {
                 .build();
     }
 
-    public static TokenListDTO toTokenList(List<TokenDTO> tokens){
+    public static TokenListDTO toTokenList(List<TokenDTO> tokens, Boolean isExist){
         return TokenListDTO.builder()
                 .tokenList(tokens)
+                .isExist(isExist)
                 .build();
     }
 }
