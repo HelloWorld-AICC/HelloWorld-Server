@@ -79,7 +79,7 @@ public class UserController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
     @Parameters({
-            @Parameter(name = "token", description = "query string(RequestParam) - refreshToken 입력"),
+            @Parameter(name = "RTK", description = "query string(RequestParam) - refreshToken 입력"),
     })
     @GetMapping("/login/reissue")
     public ApiResponse<TokenListDTO> reissueGoogleLoginInfo(@RequestParam(value = "RTK") String token) {
