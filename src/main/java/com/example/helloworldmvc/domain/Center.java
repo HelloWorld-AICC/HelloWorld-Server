@@ -53,4 +53,7 @@ public class Center {
     @OneToOne(mappedBy = "center", cascade = CascadeType.ALL)
     private File file;
 
+    public void setStatus(CenterStatus status) {
+        this.status = status;
+    }
 }

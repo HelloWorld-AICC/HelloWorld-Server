@@ -7,6 +7,7 @@ import com.example.helloworldmvc.domain.Center;
 import com.example.helloworldmvc.domain.Counselor;
 import com.example.helloworldmvc.domain.Language;
 import com.example.helloworldmvc.domain.User;
+import com.example.helloworldmvc.domain.enums.CenterStatus;
 import com.example.helloworldmvc.domain.mapping.UserLanguage;
 import com.example.helloworldmvc.repository.*;
 import com.example.helloworldmvc.web.dto.CenterRequestDTO;
@@ -14,8 +15,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +38,6 @@ public class CenterServiceImpl implements CenterService {
     public Page<Center> getCenterListByDistance(double latitude, double longitude, Integer page, Integer size) {
         return centerRepository.findAllOrderByDistance(latitude, longitude, PageRequest.of(page, size));
     }
-
 
     @Override
     public Page<Counselor> getCounselorList(String userId, Long centerId, Integer page, Integer size) {
@@ -63,5 +66,20 @@ public class CenterServiceImpl implements CenterService {
     public Center getCenter(String userId, Long centerId) {
         userRepository.findByEmail(userId).orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         return centerRepository.findById(centerId).orElseThrow(() -> new GeneralException(ErrorStatus.CENTER_NOT_FOUND));
+    }
+
+    @Override
+    /* 2시간마다 스케쥴링 */
+    @Scheduled(cron = "0 0 0/2 * * ?", zone = "Asia/Seoul")
+    public void updateCenterStatus() {
+        List<Center> centerList = centerRepository.findAll();
+        LocalTime now = LocalTime.now();
+        centerList.stream().map(center -> {
+            if(now.isAfter(center.getOpened()) && now.isBefore(center.getClosed()) ){
+                center.setStatus(CenterStatus.OPEN);
+            }
+            center.setStatus(CenterStatus.CLOSED);
+            return centerRepository.save(center);
+        });
     }
 }

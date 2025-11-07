@@ -17,4 +17,6 @@ public interface CenterService {
     Center getCenter(String userId, Long centerId);
 
     Page<Center> getCenterListByDistance(double latitude, double longitude, Integer page, Integer size);
+
+    public void updateCenterStatus();
 }
