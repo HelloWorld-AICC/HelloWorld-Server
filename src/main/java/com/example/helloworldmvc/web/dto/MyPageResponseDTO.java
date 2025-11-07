@@ -50,6 +50,7 @@ public class MyPageResponseDTO {
         Long summaryId;
         String identificationNum;
         LocalDateTime uploadedAt;
+        String title;
         String name;
         String userImg;
         String chatSummary;
