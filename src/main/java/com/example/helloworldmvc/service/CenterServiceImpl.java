@@ -78,7 +78,9 @@ public class CenterServiceImpl implements CenterService {
             if(now.isAfter(center.getOpened()) && now.isBefore(center.getClosed()) ){
                 center.setStatus(CenterStatus.OPEN);
             }
-            center.setStatus(CenterStatus.CLOSED);
+            else {
+                center.setStatus(CenterStatus.CLOSED);
+            }
             return centerRepository.save(center);
         });
     }
