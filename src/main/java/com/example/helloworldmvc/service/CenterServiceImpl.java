@@ -74,14 +74,14 @@ public class CenterServiceImpl implements CenterService {
     public void updateCenterStatus() {
         List<Center> centerList = centerRepository.findAll();
         LocalTime now = LocalTime.now();
-        centerList.stream().map(center -> {
+        centerList.forEach(center -> {
             if(now.isAfter(center.getOpened()) && now.isBefore(center.getClosed()) ){
                 center.setStatus(CenterStatus.OPEN);
             }
             else {
                 center.setStatus(CenterStatus.CLOSED);
             }
-            return centerRepository.save(center);
+            centerRepository.save(center);
         });
     }
 }
