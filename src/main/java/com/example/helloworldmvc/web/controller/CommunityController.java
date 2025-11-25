@@ -71,13 +71,11 @@ public class CommunityController {
     })
     @Parameters({
             @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
-            @Parameter(name = "category_id", description = "PathVariable - 게시글 카테고리 아이디"),
             @Parameter(name = "community_id", description = "PathVariable - 게시글 아이디"),
             @Parameter(name = "page", description = "query string(RequestParam) - 몇번째 페이지인지 가리키는 page 변수 입니다! (0부터 시작)"),
             @Parameter(name = "size", description = "query string(RequestParam) - 몇 개씩 불러올지 개수를 세는 변수입니다. (1 이상 자연수로 설정)")
     })
     public ApiResponse<CommunityResponseDTO.PostDetailDTO> getCommunityDetail(@RequestHeader(name = "Authorization") String accessToken,
-                                                                           @PathVariable(name = "category_id") Long categoryId,
                                                                            @PathVariable(name = "community_id") Long communityId,
                                                                            @RequestParam(name = "page") Integer page,
                                                                            @RequestParam(name = "size") Integer size) {
