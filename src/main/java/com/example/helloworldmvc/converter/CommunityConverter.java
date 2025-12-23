@@ -68,6 +68,7 @@ public class CommunityConverter {
         return CommunityResponseDTO.PostDetailDTO.builder()
                 .title(community.getTitle())
                 .content(community.getContent())
+                .category_id(toCategoryId(community.getCommunityCategory()))
                 .created_at(community.getCreatedAt())
                 .isOwner(isOwner)
                 .fileList(list)
