@@ -46,6 +46,7 @@ public class CommunityResponseDTO {
     public static class PostDetailDTO{
         String title;
         String content;
+        Long category_id;
         LocalDateTime created_at;
         List<FileDTO.FileDetailRes> fileList;
         List<CommentDTO> commentDTOList;
