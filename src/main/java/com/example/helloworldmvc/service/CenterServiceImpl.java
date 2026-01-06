@@ -70,7 +70,7 @@ public class CenterServiceImpl implements CenterService {
 
     @Override
     /* 2시간마다 스케쥴링 */
-    @Scheduled(cron = "0 0 0/2 * * ?", zone = "Asia/Seoul")
+    @Scheduled(fixedRate = 2 * 60 * 60 * 1000)
     public void updateCenterStatus() {
         List<Center> centerList = centerRepository.findAll();
         LocalTime now = LocalTime.now();
