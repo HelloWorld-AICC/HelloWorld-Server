@@ -27,10 +27,18 @@ public class CenterResponseDTO {
     @AllArgsConstructor
     public static class CenterMapRes {
         Long centerId;
-        String name;
+        String korName;
+        String korAddress;
+        String usaName;
+        String usaAddress;
+        String jpnName;
+        String jpnAddress;
+        String chnName;
+        String chnAddress;
+        String vnmName;
+        String vnmAddress;
         CenterStatus status;
         String closed;
-        String address;
         //MultipartFile 형으로 변경예정
         String image;
         Double latitude;
