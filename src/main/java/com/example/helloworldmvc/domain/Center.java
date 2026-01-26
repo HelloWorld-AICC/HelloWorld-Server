@@ -20,7 +20,19 @@ public class Center {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, length = 20)
-    private String name;
+    private String korName;
+
+    @Column(nullable = false, length = 100)
+    private String usaName;
+
+    @Column(nullable = false, length = 100)
+    private String jpnName;
+
+    @Column(nullable = false, length = 100)
+    private String chnName;
+
+    @Column(nullable = false, length = 100)
+    private String vnmName;
 
     @Column(nullable = false)
     private Double latitude;
@@ -39,7 +51,19 @@ public class Center {
     private LocalTime opened;
 
     @Column(nullable = false, length = 100)
-    private String address;
+    private String korAddress;
+
+    @Column(nullable = false, length = 100)
+    private String usaAddress;
+
+    @Column(nullable = false, length = 100)
+    private String jpnAddress;
+
+    @Column(nullable = false, length = 100)
+    private String chnAddress;
+
+    @Column(nullable = false, length = 100)
+    private String vnmAddress;
 
     @Column(nullable = true, length = 255)
     private String details;
