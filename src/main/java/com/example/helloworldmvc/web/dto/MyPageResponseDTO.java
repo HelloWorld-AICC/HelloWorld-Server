@@ -1,5 +1,6 @@
 package com.example.helloworldmvc.web.dto;
 
+import com.example.helloworldmvc.domain.mapping.UserLanguage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -137,5 +138,13 @@ public class MyPageResponseDTO {
     @AllArgsConstructor
     public static class DeleteUserDTO{
         String message;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserInfoDTO{
+        List<String> language;
     }
 }

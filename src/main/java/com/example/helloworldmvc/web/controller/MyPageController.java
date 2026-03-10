@@ -168,4 +168,18 @@ public class MyPageController {
         String gmail = jwtTokenProvider.getGoogleEmail(accessToken);
         return ApiResponse.onSuccess(myPageService.getAllCommentsByUser(gmail, page, size));
     }
+
+    @GetMapping("/userInfo")
+    @Operation(summary = "사용자 정보 조회 API", description = "사용자 조회 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4001", description = "사용자를 찾을수 없습니다.")
+    })
+    @Parameters({
+            @Parameter(name = "Authorization", description = "RequestHeader - 로그인한 사용자 토큰"),
+    })
+    public ApiResponse<?> getUserInfo(@RequestHeader("Authorization") String accessToken) {
+        String gmail = jwtTokenProvider.getGoogleEmail(accessToken);
+        return ApiResponse.onSuccess(myPageService.getUserInfo(gmail));
+    }
 }

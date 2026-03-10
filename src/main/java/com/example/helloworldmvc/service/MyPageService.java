@@ -21,4 +21,6 @@ public interface MyPageService {
 
     MyPageResponseDTO.MyCommentListResDTO getAllCommentsByUser(String userId, Integer page, Integer size);
 
+    MyPageResponseDTO.UserInfoDTO getUserInfo(String userId);
+
 }

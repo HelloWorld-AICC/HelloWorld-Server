@@ -103,6 +103,13 @@ public class MyPageServiceImpl implements MyPageService{
     }
 
     @Override
+    public MyPageResponseDTO.UserInfoDTO getUserInfo(String userId) {
+        User user = userRepository.findByEmail(userId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        return MyPageConverter.toUserInfoRes(user);
+    }
+
+    @Override
     public MyPageResponseDTO.MyCommentListResDTO getAllCommentsByUser(String userId, Integer page, Integer size) {
         User user = userRepository.findByEmail(userId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));

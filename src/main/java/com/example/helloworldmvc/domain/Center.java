@@ -68,6 +68,9 @@ public class Center {
     @Column(nullable = true, length = 255)
     private String details;
 
+    @Column(nullable = false, length = 20)
+    private String phoneNumber;
+
     @OneToMany(mappedBy = "center", cascade = CascadeType.ALL)
     private List<Counselor> counselorList = new ArrayList<>();
 
