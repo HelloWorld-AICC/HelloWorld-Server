@@ -157,4 +157,11 @@ public class MyPageConverter {
                 message(userId+ " 유저가 삭제 되었습니다")
                 .build();
     }
+
+    public static MyPageResponseDTO.UserInfoDTO toUserInfoRes(User user) {
+        List<String> languageList = user.getUserLanguageList().stream().map(i -> i.getLanguage().getName()).toList();
+        return MyPageResponseDTO.UserInfoDTO.builder()
+                .language(languageList)
+                .build();
+    }
 }
