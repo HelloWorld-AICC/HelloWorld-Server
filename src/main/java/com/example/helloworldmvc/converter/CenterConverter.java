@@ -48,6 +48,7 @@ public class CenterConverter {
                 .image(centerImg)
                 .latitude(center.getLatitude())
                 .longitude(center.getLongitude())
+                .phoneNumber(center.getPhoneNumber())
                 .build();
     }
 
