@@ -43,6 +43,7 @@ public class CenterResponseDTO {
         String image;
         Double latitude;
         Double longitude;
+        String phoneNumber;
     }
 
     @Builder
